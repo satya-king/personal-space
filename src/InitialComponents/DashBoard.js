@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import '../InitialComponents/LoginStyles.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -16,9 +17,9 @@ const Dashboard = () => {
     };
 
     return (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-            <h2>Welcome to Dashboard</h2>
-            <button onClick={handleLogout}>Logout</button>
+        <div className="container" >
+            <h2>Welcome to Home</h2>
+            <button onClick={handleLogout} className='logout-button'>Logout</button>
         </div>
     );
 };
