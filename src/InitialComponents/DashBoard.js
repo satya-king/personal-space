@@ -14,7 +14,7 @@ const Dashboard = () => {
         <div className='sidebar-container'>
             {localStorage.getItem("isAuthenticated") && (
                 <div className='sidebar'>
-                    <h2>My App</h2>
+                    <h2 className="h2">Menu</h2>
                     <ul>
                         <li><a href="#">Home</a></li>
                         <li><a href="#">About</a></li>

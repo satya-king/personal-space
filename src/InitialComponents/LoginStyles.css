@@ -8,6 +8,7 @@
     background-color: #f4f4f4;
     border: 2px solid black;
 }
+
 .sidebar-container {
     display: flex;
     height: 100vh;
@@ -16,23 +17,29 @@
 
 /* Sidebar Styling */
 .sidebar {
-    width: 250px;
-    background-color: #7d8083;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 16em;
+    height: 100vh;
+    background-image: linear-gradient(to top, #eec2c2, #5174d3);
+    color: #ecf0f1;
+    padding: 15px;
+    transition: width 0.3s;
+    overflow-y: hidden;
+    z-index: 1000;
 }
 
 .sidebar h2 {
     font-size: 24px;
+    color: 'Blue';
+    border: #007bff;
 }
 
 .sidebar ul {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
