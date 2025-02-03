@@ -22,27 +22,29 @@ const Login = () => {
 
     return (
         <div className='container'>
-            <div className='card' style={{border:'2px solid black'}}>
-                <h2>Login</h2>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className='inputField'
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className='inputField'
-                />
-                <button onClick={handleLogin} className='button'>
-                    Login
-                </button>
-                {error && <p className='error'>{error}</p>}
-            </div>
+            {!localStorage.getItem("isAuthenticated") && (
+                <div className='card' style={{border:'2px solid black'}}>
+                    <h2>Login</h2>
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className='inputField'
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className='inputField'
+                    />
+                    <button onClick={handleLogin} className='button'>
+                        Login
+                    </button>
+                    {error && <p className='error'>{error}</p>}
+                </div>
+            )}
         </div>
     );
 };

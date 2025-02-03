@@ -1,15 +1,9 @@
-import { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import '../InitialComponents/LoginStyles.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!localStorage.getItem("isAuthenticated")) {
-            navigate("/");
-        }
-    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("isAuthenticated");
@@ -17,9 +11,24 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="container" >
-            <h2>Welcome to Home</h2>
-            <button onClick={handleLogout} className='logout-button'>Logout</button>
+        <div className='sidebar-container'>
+            {localStorage.getItem("isAuthenticated") && (
+                <div className='sidebar'>
+                    <h2>My App</h2>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            )}
+
+            <div className='mainContent'>
+                <h2>Welcome to the Dashboard</h2>
+                <button onClick={handleLogout} className='logout-button'>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 };

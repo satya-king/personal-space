@@ -1,4 +1,4 @@
-/* Login.module.css */
+/* LoginStyles.css */
 .container {
     display: flex;
     flex-direction: column;
@@ -8,7 +8,58 @@
     background-color: #f4f4f4;
     border: 2px solid black;
 }
+.sidebar-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
 
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: #7d8083;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    color: #3bed27;
+    transform: scale(1.1);
+}
+
+/* Main Content Styling */
+.mainContent {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login Card */
 .card {
     background: white;
     padding: 30px;
@@ -16,12 +67,11 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
     text-align: center;
+    border: 2px solid black;
+    /* Keeping your inline style */
 }
 
-h2 {
-    color: #333;
-}
-
+/* Input Fields */
 .inputField {
     width: 100%;
     padding: 10px;
@@ -31,8 +81,9 @@ h2 {
     font-size: 16px;
 }
 
+/* Button Styling */
 .button {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     background-color: #007bff;
     color: white;
@@ -41,27 +92,25 @@ h2 {
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
-    border: 2px solid black;
 }
 
 .logout-button {
     width: 10%;
     padding: 10px;
-    background-color: #d33f61;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
-    border: 2px solid black;
 }
-
 
 .button:hover {
     background-color: #0056b3;
 }
 
+/* Error Message */
 .error {
     color: red;
     margin-top: 10px;
