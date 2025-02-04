@@ -1,61 +1,32 @@
-/* LoginStyles.css */
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Container for Login Page */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 99vh;
+    height: 100vh;
     background-color: #f4f4f4;
     border: 2px solid black;
 }
 
+/* Sidebar and Main Content Layout */
 .sidebar-container {
     display: flex;
     height: 100vh;
     background-color: #f4f4f4;
-}
-
-/* Sidebar Styling */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 16em;
-    height: 100vh;
-    background-image: linear-gradient(to top, #eec2c2, #5174d3);
-    color: #ecf0f1;
-    padding: 15px;
-    transition: width 0.3s;
-    overflow-y: hidden;
-    z-index: 1000;
-}
-
-.sidebar h2 {
-    font-size: 24px;
-    color: 'Blue';
-    border: #007bff;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    margin: 15px 0;
-}
-
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.sidebar ul li a:hover {
-    color: #3bed27;
-    transform: scale(1.1);
 }
 
 /* Main Content Styling */
@@ -64,6 +35,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 /* Login Card */
@@ -75,7 +47,6 @@
     width: 350px;
     text-align: center;
     border: 2px solid black;
-    /* Keeping your inline style */
 }
 
 /* Input Fields */
@@ -117,8 +88,151 @@
     background-color: #0056b3;
 }
 
+.logout-button:hover {
+    background-color: #0056b3;
+}
+
 /* Error Message */
 .error {
     color: red;
     margin-top: 10px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    top: 0;
+    left: 0;
+    width: 15em;
+    background-image: linear-gradient(to top, #eec2c2, #5174d3);
+    color: #0ab9e4;
+    padding: 15px;
+    transition: width 0.3s;
+    z-index: 1000;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+}
+
+.sidebar h2 {
+    font-size: 26px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ffffff;
+    /* Border under the title */
+    padding-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 26px;
+    /* Set font size for menu items */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.submenu li a {
+    font-size: 22px;
+    /* Set font size for submenu items */
+}
+
+.sidebar ul li :hover {
+    color: #31f31b;
+    font-size: 20px;
+    transform: translateX(15px);
+    transition: transform 0.3s ease;
+}
+
+/* Submenu Styling */
+.submenu {
+    list-style: none;
+    padding-left: 24px;
+    display: none;
+    /* Hidden by default */
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    /* Initially hidden */
+    opacity: 0;
+}
+
+/* Show submenu if parent is clicked */
+.submenu li {
+    margin: 10px 0;
+    padding-left: 10px;
+}
+
+/* When the submenu is shown */
+.submenu.visible {
+    display: block;
+    max-height: 1000px;
+    opacity: 1;
+}
+
+/* Active sidebar item styling */
+.sidebar ul li.active a {
+    color: #3bed27;
+    font-weight: bold;
+}
+
+/* Sidebar Scroll */
+.sidebar {
+    overflow-y: auto;
+    /* Enables vertical scrolling for the sidebar */
+}
+
+/* Responsive Styles for Sidebar */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .sidebar-container {
+        flex-direction: column;
+    }
+
+    .mainContent {
+        padding-top: 20px;
+    }
+
+    .sidebar ul li a {
+        font-size: 16px;
+    }
+}
+
+.sidebar ul>li>a {
+    /* Select only direct child <a> elements of <li> under .sidebar */
+    color: white;
+    text-decoration: none;
+    font-size: 26px;
+    /* Set font size for menu items */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Active child item styling */
+.active-child a {
+    color: #31f31b;
+    font-weight: bold;
+    transform: translateX(15px);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.active {
+    color: #1a33db;
+    /* Highlight color */
+    font-weight: bold;
+    /* Make it bold */
+    transform: translateX(15px);
+    /* Optional: Add some animation */
+    transition: transform 0.3s ease, color 0.3s ease;
 }
