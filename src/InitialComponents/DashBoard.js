@@ -95,9 +95,9 @@ const Dashboard = () => {
                 <div className="mainContent">
                     <img src="/funnyDev.jpg" alt="Logo" />
                     <h2>Welcome to the Dashboard</h2>
-                    <button onClick={handleLogout} className="logout-button">
+                    {/* <button onClick={handleLogout} className="logout-button">
                         Logout
-                    </button>
+                    </button> */}
                 </div>
 
             </div>

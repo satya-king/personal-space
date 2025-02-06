@@ -14,6 +14,7 @@ const Login = () => {
 
         if (username === validUser && password === validPass) {
             localStorage.setItem("isAuthenticated", "true");
+            localStorage.setItem("userName", validUser);
             navigate("/home");
         } else {
             setError("Invalid Credentials");
@@ -23,7 +24,7 @@ const Login = () => {
     return (
         <div className='container'>
             {!localStorage.getItem("isAuthenticated") && (
-                <div className='card' style={{border:'2px solid black'}}>
+                <div className='card' style={{ border: '2px solid black' }}>
                     <h2>Login</h2>
                     <input
                         type="text"
