@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../InitialComponents/LoginStyles.css';
+import StickerHeader from "./StickyHeader";
 
 // Define the JSON data for the sidebar
 const menuData = [
@@ -40,7 +41,7 @@ const Dashboard = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("isAuthenticated");
-        navigate("/");
+        navigate("/login");
     };
 
     const toggleMenu = (menuId) => {
@@ -58,43 +59,49 @@ const Dashboard = () => {
     };
 
     return (
-        <div className='sidebar-container'>
-            {localStorage.getItem("isAuthenticated") && (
-                <div className='sidebar'>
-                    <h2 className="h2">Menu</h2>
-                    <ul>
-                        {menuData.map(menuItem => (
-                            <li key={menuItem.id}>
-                                <a href="#" onClick={() => toggleMenu(menuItem.id)}>
-                                    {menuItem.title}
-                                </a>
-                                {/* Submenu items */}
-                                <ul className={`submenu ${openMenus.includes(menuItem.id) ? 'visible' : ''}`}>
-                                    {menuItem.subItems.map(subItem => (
-                                        <li key={subItem.id}>
-                                            <a
-                                                href="#"
-                                                onClick={() => handleSubItemClick(subItem.id)}
-                                                className={activeItem === subItem.id ? 'active' : ''}
-                                            >
-                                                {subItem.title}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+        <>
+            <StickerHeader />
+            <div className='sidebar-container'>
 
-            <div className='mainContent'>
-                <h2>Welcome to the Dashboard</h2>
-                <button onClick={handleLogout} className='logout-button'>
-                    Logout
-                </button>
+                {localStorage.getItem("isAuthenticated") && (
+                    <div className='sidebar'>
+                        <h2 className="h2">Menu</h2>
+                        <ul>
+                            {menuData.map(menuItem => (
+                                <li key={menuItem.id}>
+                                    <a href="#" onClick={() => toggleMenu(menuItem.id)}>
+                                        {menuItem.title}
+                                    </a>
+                                    {/* Submenu items */}
+                                    <ul className={`submenu ${openMenus.includes(menuItem.id) ? 'visible' : ''}`}>
+                                        {menuItem.subItems.map(subItem => (
+                                            <li key={subItem.id}>
+                                                <a
+                                                    href="#"
+                                                    onClick={() => handleSubItemClick(subItem.id)}
+                                                    className={activeItem === subItem.id ? 'active' : ''}
+                                                >
+                                                    {subItem.title}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                <div className="mainContent">
+                    <img src="/funnyDev.jpg" alt="Logo" />
+                    <h2>Welcome to the Dashboard</h2>
+                    <button onClick={handleLogout} className="logout-button">
+                        Logout
+                    </button>
+                </div>
+
             </div>
-        </div>
+        </>
     );
 };
 

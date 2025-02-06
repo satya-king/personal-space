@@ -31,12 +31,41 @@ body {
 
 /* Main Content Styling */
 .mainContent {
-    flex-grow: 1;
     display: flex;
+    flex-direction: column; /* Stack elements vertically */
     justify-content: center;
     align-items: center;
+    position: relative; /* To position the logout button */
     padding: 20px;
+    border: 2px solid red;
+    width: 100%;
+    height: 100%; /* Ensure the content fills the container */
 }
+
+.mainContent img {
+    width: 100%; /* Make the image take up the full width */
+    height: auto; /* Maintain the aspect ratio */
+    max-width: 500px; /* Set a max width to prevent it from getting too large */
+    object-fit: contain; /* Ensure the image fits properly */
+}
+
+.logout-button {
+    position: absolute; /* Position the button relative to the parent container */
+    top: 20px; /* Set the top distance from the container's top */
+    right: 20px; /* Set the right distance from the container's right side */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #f44336; /* Red background for logout button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
 
 /* Login Card */
 .card {

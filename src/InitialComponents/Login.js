@@ -22,7 +22,7 @@ const Login = () => {
 
     return (
         <div className='container'>
-            {/* {!localStorage.getItem("isAuthenticated") && ( */}
+            {!localStorage.getItem("isAuthenticated") && (
                 <div className='card' style={{border:'2px solid black'}}>
                     <h2>Login</h2>
                     <input
@@ -44,7 +44,7 @@ const Login = () => {
                     </button>
                     {error && <p className='error'>{error}</p>}
                 </div>
-            {/* )} */}
+            )}
         </div>
     );
 };
