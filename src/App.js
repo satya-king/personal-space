@@ -1,13 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Login from "./InitialComponents/Login";
 import Dashboard from "./InitialComponents/DashBoard";
+import HumanVerificationMath from "./Verifications/HumanVerificationMath";
+
+const HumanVerificationWrapper = ({ setIsVerified }) => {
+  const navigate = useNavigate();
+
+  const handleVerification = () => {
+    setIsVerified(true);
+    localStorage.clear()
+    navigate("/login"); // Redirect to login page after verification
+  };
+
+  return <HumanVerificationMath onVerify={handleVerification} />;
+};
 
 function App() {
+  const [isVerified, setIsVerified] = useState(false);
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Dashboard />} />
+        {
+          (!isVerified && !localStorage.getItem('isAuthenticated')) ? (
+            <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
+          ) : (
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/home" element={<Dashboard />} />
+            </>
+          )
+        }
       </Routes>
     </Router>
   );
