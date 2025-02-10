@@ -12,7 +12,7 @@ const StickerHeader = ({ username }) => {
 
     const handleLogout = () => {
         Swal.fire({
-            text: "Are you sure want to sign out?",
+            text: "Are you sure want to Logout?",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

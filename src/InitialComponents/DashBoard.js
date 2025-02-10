@@ -93,8 +93,8 @@ const Dashboard = () => {
                 )}
 
                 <div className="mainContent">
-                    <img src="/funnyDev.jpg" alt="Logo" />
-                    <h2>Welcome to the Dashboard</h2>
+                    <img src="/funnyDevGif3.gif" alt="Logo" />
+                    <h2 style={{ marginTop: '5px' }}>Welcome to the Development World!</h2>
                     {/* <button onClick={handleLogout} className="logout-button">
                         Logout
                     </button> */}
