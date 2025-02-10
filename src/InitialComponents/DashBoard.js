@@ -64,7 +64,14 @@ const Dashboard = () => {
             <div className='sidebar-container'>
 
                 {localStorage.getItem("isAuthenticated") && (
-                    <div className='sidebar'>
+                    <div className='sidebar'
+                        style={{
+                            backgroundImage: 'url(/roboticImage.jpg)',
+                            backgroundSize: 'auto 100%',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat'
+                        }}
+                    >
                         <h2 className="h2">Menu</h2>
                         <ul>
                             {menuData.map(menuItem => (
@@ -92,13 +99,21 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                <div className="mainContent">
+                <div className="mainContent"
+                    style={{
+                        backgroundImage: 'url(/GirlDancingGif.gif)',
+                        backgroundSize: '30%',  // Keep this line to make the image smaller
+                        backgroundPosition: 'center'
+                    }}>
+                    <img src="/funnyDevGif3.gif" alt="Logo" />
+                    <h1 style={{ marginTop: '5px', color: 'red' }}>Welcome to the Development World!</h1>
+                </div>
+
+
+                {/* <div className="mainContent" style={{backgroundImage}}>
                     <img src="/funnyDevGif3.gif" alt="Logo" />
                     <h2 style={{ marginTop: '5px' }}>Welcome to the Development World!</h2>
-                    {/* <button onClick={handleLogout} className="logout-button">
-                        Logout
-                    </button> */}
-                </div>
+                </div> */}
 
             </div>
         </>
