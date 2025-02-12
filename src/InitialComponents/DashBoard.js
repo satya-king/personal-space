@@ -101,7 +101,7 @@ const Dashboard = () => {
 
                 <div className="mainContent"
                     style={{
-                        backgroundImage: 'url(/GirlDancingGif.gif)',
+                        // backgroundImage: 'url(/GirlDancingGif.gif)',
                         backgroundSize: '30%',  // Keep this line to make the image smaller
                         backgroundPosition: 'center'
                     }}>

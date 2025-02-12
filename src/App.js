@@ -3,6 +3,7 @@ import { useState } from "react";
 import Login from "./InitialComponents/Login";
 import Dashboard from "./InitialComponents/DashBoard";
 import HumanVerificationMath from "./Verifications/HumanVerificationMath";
+import ToDoList from "./Components/ToDoList";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function App() {
             <>
               <Route path="/login" element={<Login />} />
               <Route path="/home" element={<Dashboard />} />
+              <Route path="/toDoList" element={<ToDoList />} />
             </>
           )
         }
