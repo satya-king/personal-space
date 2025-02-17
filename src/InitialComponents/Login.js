@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../InitialComponents/LoginStyles.css';
+import { BASE_URL } from "../APIURLs/Urls";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -8,14 +9,12 @@ const Login = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // Change BASE_URL to match local or server
-    const BASE_URL = "http://localhost:8080/learn/login"; // Change when deploying
 
     const handleLogin = async () => {
         setError("");  // Clear previous errors
 
         try {
-            const response = await fetch("http://localhost:8080/learn/login", {
+            const response = await fetch(BASE_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -23,11 +22,7 @@ const Login = () => {
                 body: JSON.stringify({ username, password })
             });
 
-            console.log("Response Status:", response.status); // Debugging status
-
             const data = await response.text(); // Read response body
-
-            console.log("Response Data:", data); // Print full response
 
             if (response.ok) {
                 localStorage.setItem("isAuthenticated", "true");
