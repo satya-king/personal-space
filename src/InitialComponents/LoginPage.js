@@ -165,100 +165,99 @@ const LoginPage = () => {
     };
 
 
-
     return (
         <>
-         
-                    <div style={styles.container}>
-                        <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
-                        <form onSubmit={handleSubmit}>
-                            <div>
-                                <label style={styles.label} htmlFor="loginId">Login ID</label>
-                                <input
-                                    style={styles.input}
-                                    type="text"
-                                    id="loginId"
-                                    value={loginId}
-                                    onChange={(e) => setLoginId(e.target.value)}
-                                    required
-                                />
-                            </div>
 
-                            <div>
-                                <label style={styles.label} htmlFor="password">Password</label>
-                                <input
-                                    style={styles.input}
-                                    type="password"
-                                    id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            {/* Forgot Password */}
-                            <div style={forgotPasswordStyle}>Forgot Password ?</div>
-                            <div>
-                                <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
-                                    <span style={{
-                                        display: 'inline-block',
-                                        padding: '0px 5px',
-                                        border: '2px solid black',
-                                        borderRadius: '5px',
-                                        fontSize: '24px',
-                                        fontWeight: 'bold',
-                                        fontFamily: "'Courier New', monospace",
-                                        letterSpacing: '3px',
-                                        background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
-                                        color: '#333',
-                                        textAlign: 'center',
-                                        boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-                                        userSelect: 'none'
-                                    }}>
-                                        {captcha}
-                                    </span> &nbsp;
-                                    <span> <button
-                                        type="button"
-                                        style={styles.voiceButton}
-                                        onClick={handleVoiceClick}
-                                    >
-                                        <FaVolumeUp size={30} color="violet" />
-                                    </button></span>
-                                    <span> <BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
-                                </label>
-                                <div style={styles.captchaContainer}>
-                                    <input
-                                        style={styles.input}
-                                        type="text"
-                                        id="captchaInput"
-                                        value={captchaInput}
-                                        onChange={(e) => setCaptchaInput(e.target.value)}
-                                        required
-                                    />
-
-
-
-                                </div>
-                            </div>
-                            <div>
-                                <button
-                                    type="submit"
-                                    style={styles.submitButton}
-                                    onMouseOver={(e) => e.target.style.backgroundColor = styles.submitButtonHover.backgroundColor}
-                                    onMouseOut={(e) => e.target.style.backgroundColor = styles.submitButton.backgroundColor}
-                                >
-                                    Login
-                                </button>
-                            </div>
-                            {/* Register Link */}
-                            <div style={registerContainerStyle}>
-                                Don’t have an Account?{" "}
-                                <span style={registerLinkStyle} onClick={() => setRegistration(true)}>
-                                    Register
-                                </span>
-                            </div>
-                        </form>
+            <div style={styles.container}>
+                <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label style={styles.label} htmlFor="loginId">Login ID</label>
+                        <input
+                            style={styles.input}
+                            type="text"
+                            id="loginId"
+                            value={loginId}
+                            onChange={(e) => setLoginId(e.target.value)}
+                            required
+                        />
                     </div>
-            
+
+                    <div>
+                        <label style={styles.label} htmlFor="password">Password</label>
+                        <input
+                            style={styles.input}
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {/* Forgot Password */}
+                    <div style={forgotPasswordStyle}>Forgot Password ?</div>
+                    <div>
+                        <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
+                            <span style={{
+                                display: 'inline-block',
+                                padding: '0px 5px',
+                                border: '2px solid black',
+                                borderRadius: '5px',
+                                fontSize: '24px',
+                                fontWeight: 'bold',
+                                fontFamily: "'Courier New', monospace",
+                                letterSpacing: '3px',
+                                background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
+                                color: '#333',
+                                textAlign: 'center',
+                                boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
+                                userSelect: 'none'
+                            }}>
+                                {captcha}
+                            </span> &nbsp;
+                            <span> <button
+                                type="button"
+                                style={styles.voiceButton}
+                                onClick={handleVoiceClick}
+                            >
+                                <FaVolumeUp size={30} color="violet" />
+                            </button></span>
+                            <span> <BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
+                        </label>
+                        <div style={styles.captchaContainer}>
+                            <input
+                                style={styles.input}
+                                type="text"
+                                id="captchaInput"
+                                value={captchaInput}
+                                onChange={(e) => setCaptchaInput(e.target.value)}
+                                required
+                            />
+
+
+
+                        </div>
+                    </div>
+                    <div>
+                        <button
+                            type="submit"
+                            style={styles.submitButton}
+                            onMouseOver={(e) => e.target.style.backgroundColor = styles.submitButtonHover.backgroundColor}
+                            onMouseOut={(e) => e.target.style.backgroundColor = styles.submitButton.backgroundColor}
+                        >
+                            Login
+                        </button>
+                    </div>
+                    {/* Register Link */}
+                    <div style={registerContainerStyle}>
+                        Don’t have an Account?{" "}
+                        <span style={registerLinkStyle} onClick={() => setRegistration(true)}>
+                            Register
+                        </span>
+                    </div>
+                </form>
+            </div>
+
         </>
     );
 }
