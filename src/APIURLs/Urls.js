@@ -4,4 +4,4 @@ export const BASE_URL = "https://learn-spring-boot.onrender.com/learn/login"
 
 
 
-LOGIN_URL = "https://personal-space-lime.vercel.app/"
+export const LOGIN_URL = "https://personal-space-lime.vercel.app/"
