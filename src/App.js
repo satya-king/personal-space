@@ -6,6 +6,7 @@ import HumanVerificationMath from "./Verifications/HumanVerificationMath";
 import ToDoList from "./Components/ToDoList";
 import LoginPage from "./InitialComponents/LoginPage";
 import HomePage from "./InitialComponents/HomePage";
+import LandingPage from "./InitialComponents/LandingPage";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -31,9 +32,11 @@ function App() {
           ) : (
             <>
               {/* <Route path="/login" element={<Login />} /> */}
-              <Route path="/login" element={<HomePage />} />
+              {/* <Route path="/login" element={<HomePage />} /> */}
+              <Route path="/login" element={<LandingPage />} />
               <Route path="/home" element={<Dashboard />} />
               <Route path="/toDoList" element={<ToDoList />} />
+              {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
              
             </>
           )

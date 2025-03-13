@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
 import { FaVolumeUp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../APIURLs/Urls";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 
 const generateCaptcha = () => {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -42,6 +45,10 @@ const LoginPage = () => {
     const [captcha, setCaptcha] = useState(generateCaptcha());
     const [captchaInput, setCaptchaInput] = useState('')
     const [registration, setRegistration] = useState(false)
+    const [showForgotPassword, setShowForgotPassword] = useState(false); // State to toggle forms
+
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     // Function to regenerate Captcha
     const handleCaptchaRefresh = () => {
@@ -65,23 +72,39 @@ const LoginPage = () => {
         });
     };
 
-    // Handle login form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (captchaInput !== captcha) {
-            alert('Invalid Captcha!');
-        } else {
-            alert('Logged in successfully');
-            // Handle login logic here
+    const handleLogin = async () => {
+        setError("");  // Clear previous errors
+
+        try {
+            const response = await fetch(BASE_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ loginId, password })
+            });
+
+            const data = await response.text(); // Read response body
+
+            if (response.ok) {
+                localStorage.setItem("isAuthenticated", "true");
+                localStorage.setItem("loginId", loginId);
+                navigate("/home");
+            } else {
+                setError(data);
+            }
+        } catch (error) {
+            console.error("Login Request Failed:", error);
+            setError("Something went wrong. Try again.");
         }
-    }
+    };
 
     // Inline styles
     const styles = {
         container: {
-            maxWidth: '400px',
+            maxWidth: '500px',
             margin: '0 auto',
-            padding: '20px',
+            padding: '80px',
             border: '1px solid #ccc',
             borderRadius: '8px',
             backgroundColor: '#f9f9f9',
@@ -148,7 +171,7 @@ const LoginPage = () => {
         textAlign: "right",
         fontWeight: 'bold',
         color: "red",
-        fontSize: "12px",
+        fontSize: "15px",
         cursor: "pointer",
     };
 
@@ -168,95 +191,127 @@ const LoginPage = () => {
     return (
         <>
 
-            <div style={styles.container}>
-                <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label style={styles.label} htmlFor="loginId">Login ID</label>
-                        <input
-                            style={styles.input}
-                            type="text"
-                            id="loginId"
-                            value={loginId}
-                            onChange={(e) => setLoginId(e.target.value)}
-                            required
-                        />
-                    </div>
+            <div>
+                {showForgotPassword ? (
+                    <ForgotPasswordForm onBackToLogin={() => setShowForgotPassword(false)} />
+                ) : (
+                    <div style={styles.container}>
+                        <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
+                        <form onSubmit={handleLogin}>
+                            <div>
+                                <label style={styles.label} htmlFor="loginId">Login ID</label>
+                                <input
+                                    style={styles.input}
+                                    type="text"
+                                    id="loginId"
+                                    value={loginId}
+                                    onChange={(e) => setLoginId(e.target.value)}
+                                    required
+                                />
+                            </div>
 
-                    <div>
-                        <label style={styles.label} htmlFor="password">Password</label>
-                        <input
-                            style={styles.input}
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    {/* Forgot Password */}
-                    <div style={forgotPasswordStyle}>Forgot Password ?</div>
-                    <div>
-                        <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
-                            <span style={{
-                                display: 'inline-block',
-                                padding: '0px 5px',
-                                border: '2px solid black',
-                                borderRadius: '5px',
-                                fontSize: '24px',
-                                fontWeight: 'bold',
-                                fontFamily: "'Courier New', monospace",
-                                letterSpacing: '3px',
-                                background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
-                                color: '#333',
-                                textAlign: 'center',
-                                boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-                                userSelect: 'none'
-                            }}>
-                                {captcha}
-                            </span> &nbsp;
-                            <span> <button
-                                type="button"
-                                style={styles.voiceButton}
-                                onClick={handleVoiceClick}
+                            <div>
+                                <label style={styles.label} htmlFor="password">Password</label>
+                                <input
+                                    style={styles.input}
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div style={forgotPasswordStyle} onClick={() => setShowForgotPassword(true)}>
+                                <u>Forgot Password?</u>
+                            </div>
+
+                            <div>
+                                <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
+                                    <span style={{
+                                        display: 'inline-block',
+                                        padding: '0px 5px',
+                                        border: '2px solid black',
+                                        borderRadius: '5px',
+                                        fontSize: '24px',
+                                        fontWeight: 'bold',
+                                        fontFamily: "'Courier New', monospace",
+                                        letterSpacing: '3px',
+                                        background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
+                                        color: '#333',
+                                        textAlign: 'center',
+                                        boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
+                                        userSelect: 'none',
+                                    }}>
+                                        {captcha}
+                                    </span>
+                                    <span><BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
+                                </label>
+                                <input
+                                    style={styles.input}
+                                    type="text"
+                                    id="captchaInput"
+                                    value={captchaInput}
+                                    onChange={(e) => setCaptchaInput(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                style={styles.submitButton}
                             >
-                                <FaVolumeUp size={30} color="violet" />
-                            </button></span>
-                            <span> <BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
-                        </label>
-                        <div style={styles.captchaContainer}>
-                            <input
-                                style={styles.input}
-                                type="text"
-                                id="captchaInput"
-                                value={captchaInput}
-                                onChange={(e) => setCaptchaInput(e.target.value)}
-                                required
-                            />
+                                Login
+                            </button>
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
+                        </form> 
+                        &nbsp;
+                        {/* <div style={{
+                            padding: '20px',
+                            background: 'linear-gradient(to right, #00c6ff, #0072ff)', // Gradient background
+                            borderRadius: '5px',
+                            boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                            maxWidth: '500px',
+                            height:'40vh',
+                            margin: 'auto',
+                            textAlign: 'center',
+                            color: '#fff'
+                        }}>
+                            <h2 style={{
+                                fontSize: '2.5rem',
+                                fontWeight: 'bold',
+                                color: '#fff',
+                                marginBottom: '20px',
+                                letterSpacing: '1px',
+                                textTransform: 'uppercase'
+                            }}>
+                                Software Development
+                            </h2>
+                            <p style={{
+                                fontSize: '1.2rem',
+                                color: '#f1f1f1',
+                                lineHeight: '1.4',  // Reduced line height to reduce height
+                                fontWeight: '300',
+                                fontFamily: "'Roboto', sans-serif",
+                                marginBottom: '0',
+                                textAlign: 'justify',
+                                width: '100%',  // Increased width (adjust as needed)
+                                padding: '1px',  // Adjust padding for better appearance
+                            }}>
+                                Software development is the process of designing, creating, testing, and maintaining software applications or systems. It involves various stages like planning, coding, debugging, and deploying. With the rapid growth of technology, software development has become a vital part of almost every industry.
+                            </p>
 
-
-
-                        </div>
+                        </div> */}
                     </div>
-                    <div>
-                        <button
-                            type="submit"
-                            style={styles.submitButton}
-                            onMouseOver={(e) => e.target.style.backgroundColor = styles.submitButtonHover.backgroundColor}
-                            onMouseOut={(e) => e.target.style.backgroundColor = styles.submitButton.backgroundColor}
-                        >
-                            Login
-                        </button>
-                    </div>
-                    {/* Register Link */}
-                    <div style={registerContainerStyle}>
-                        Don’t have an Account?{" "}
-                        <span style={registerLinkStyle} onClick={() => setRegistration(true)}>
-                            Register
-                        </span>
-                    </div>
-                </form>
+                )}
             </div>
+
+
+
+
+
+
+
 
         </>
     );

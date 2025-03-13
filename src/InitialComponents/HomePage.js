@@ -22,12 +22,18 @@ const HomePage = () => {
         justifyContent: "center",
         backgroundColor: "#fff",
         width: "30%", // Update the width if you want different sizing
-        padding: "20px",
+        padding: "50px",
+        // border: "1px solid", // Add a solid black border, you can change the color and width
+        borderRadius: "50px", // Add rounded corners
+        margin: "20px", // Add margin for spacing outside the element
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)", // Add shadow for a subtle 3D effect
+        overflow: "hidden", // Ensure that content doesn't overflow if it's too big
     };
+
 
     const rightSideStyle = {
         position: "relative",
-        backgroundImage: `url("/ap.png")`, // Update the image URL as per your directory
+        // backgroundImage: `url("/ap.png")`, // Update the image URL as per your directory
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
@@ -35,7 +41,7 @@ const HomePage = () => {
         justifyContent: "center",
         textAlign: "center",
         color: "white",
-        width: "70%", // Update the width if you want different sizing
+        width: "100%", // Update the width if you want different sizing
         height: "100%",
     };
 
@@ -51,7 +57,7 @@ const HomePage = () => {
     const textStyle = {
         position: "relative",
         zIndex: 1,
-        fontSize: "2.5rem",
+        fontSize: "2.1rem",
         fontWeight: "bold",
         textShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)",
     };
@@ -60,15 +66,33 @@ const HomePage = () => {
         <Container fluid style={containerStyle}>
             <Row style={rowStyle}>
                 {/* Right Side - Welcome Section */}
-                <Col md={6} style={rightSideStyle}>
+                {/* <Col md={6} style={rightSideStyle}>
                     <div style={overlayStyle}></div>
                     <div style={textStyle}>
                         <h1>Welcome to <br /> Learners World</h1>
                     </div>
+                </Col> */}
+                <Col md={6} style={{
+                    ...rightSideStyle,
+                    backgroundImage: 'url(/FastTechnology.png)',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    height: '100%', // Ensure height is defined if needed
+                    position: 'relative' // For overlay positioning
+                }}>
+                    <div style={overlayStyle}></div>
+                    <div style={textStyle}>
+                        {/* <h1>Welcome </h1> */}
+                    </div>
                 </Col>
 
                 {/* Left Side - Login Form */}
-                <Col md={6} style={leftSideStyle}>
+                <Col md={6} style={{
+                    ...leftSideStyle,
+                    backgroundImage: 'url(/.jpg)',
+                    backgroundPosition: 'center',
+
+                }}>
                     <LoginPage />
                 </Col>
             </Row>
