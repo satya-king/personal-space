@@ -191,82 +191,84 @@ const LoginPage = () => {
     return (
         <>
 
-            <div>
-                {showForgotPassword ? (
-                    <ForgotPasswordForm onBackToLogin={() => setShowForgotPassword(false)} />
-                ) : (
-                    <div style={styles.container}>
-                        <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
-                        <form onSubmit={handleLogin}>
-                            <div>
-                                <label style={styles.label} htmlFor="loginId">Login ID</label>
-                                <input
-                                    style={styles.input}
-                                    type="text"
-                                    id="loginId"
-                                    value={loginId}
-                                    onChange={(e) => setLoginId(e.target.value)}
-                                    required
-                                />
-                            </div>
+            {
+                !localStorage.getItem("isAuthenticated") &&
+                <div>
+                    {showForgotPassword ? (
+                        <ForgotPasswordForm onBackToLogin={() => setShowForgotPassword(false)} />
+                    ) : (
+                        <div style={styles.container}>
+                            <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
+                            <form onSubmit={handleLogin}>
+                                <div>
+                                    <label style={styles.label} htmlFor="loginId">Login ID</label>
+                                    <input
+                                        style={styles.input}
+                                        type="text"
+                                        id="loginId"
+                                        value={loginId}
+                                        onChange={(e) => setLoginId(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                            <div>
-                                <label style={styles.label} htmlFor="password">Password</label>
-                                <input
-                                    style={styles.input}
-                                    type="password"
-                                    id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
+                                <div>
+                                    <label style={styles.label} htmlFor="password">Password</label>
+                                    <input
+                                        style={styles.input}
+                                        type="password"
+                                        id="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                            <div style={forgotPasswordStyle} onClick={() => setShowForgotPassword(true)}>
-                                <u>Forgot Password?</u>
-                            </div>
+                                <div style={forgotPasswordStyle} onClick={() => setShowForgotPassword(true)}>
+                                    <u>Forgot Password?</u>
+                                </div>
 
-                            <div>
-                                <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
-                                    <span style={{
-                                        display: 'inline-block',
-                                        padding: '0px 5px',
-                                        border: '2px solid black',
-                                        borderRadius: '5px',
-                                        fontSize: '24px',
-                                        fontWeight: 'bold',
-                                        fontFamily: "'Courier New', monospace",
-                                        letterSpacing: '3px',
-                                        background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
-                                        color: '#333',
-                                        textAlign: 'center',
-                                        boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-                                        userSelect: 'none',
-                                    }}>
-                                        {captcha}
-                                    </span>
-                                    <span><BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
-                                </label>
-                                <input
-                                    style={styles.input}
-                                    type="text"
-                                    id="captchaInput"
-                                    value={captchaInput}
-                                    onChange={(e) => setCaptchaInput(e.target.value)}
-                                    required
-                                />
-                            </div>
+                                <div>
+                                    <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
+                                        <span style={{
+                                            display: 'inline-block',
+                                            padding: '0px 5px',
+                                            border: '2px solid black',
+                                            borderRadius: '5px',
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            fontFamily: "'Courier New', monospace",
+                                            letterSpacing: '3px',
+                                            background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
+                                            color: '#333',
+                                            textAlign: 'center',
+                                            boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
+                                            userSelect: 'none',
+                                        }}>
+                                            {captcha}
+                                        </span>
+                                        <span><BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
+                                    </label>
+                                    <input
+                                        style={styles.input}
+                                        type="text"
+                                        id="captchaInput"
+                                        value={captchaInput}
+                                        onChange={(e) => setCaptchaInput(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                            <button
-                                type="submit"
-                                style={styles.submitButton}
-                            >
-                                Login
-                            </button>
-                            {error && <p style={{ color: 'red' }}>{error}</p>}
-                        </form> 
-                        &nbsp;
-                        {/* <div style={{
+                                <button
+                                    type="submit"
+                                    style={styles.submitButton}
+                                >
+                                    Login
+                                </button>
+                                {error && <p style={{ color: 'red' }}>{error}</p>}
+                            </form>
+                            &nbsp;
+                            {/* <div style={{
                             padding: '20px',
                             background: 'linear-gradient(to right, #00c6ff, #0072ff)', // Gradient background
                             borderRadius: '5px',
@@ -302,16 +304,10 @@ const LoginPage = () => {
                             </p>
 
                         </div> */}
-                    </div>
-                )}
-            </div>
-
-
-
-
-
-
-
+                        </div>
+                    )}
+                </div>
+            }
 
         </>
     );

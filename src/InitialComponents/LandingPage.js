@@ -83,40 +83,46 @@ const LandingPage = () => {
     };
 
     return (
-        <div style={styles.landingPage}>
-            {/* Header */}
-            <header style={styles.header}>
-                <div style={styles.logo}>Landing Page</div>
-                <nav>
-                    <a href="#home" style={styles.navLink}>Home</a>
-                    <a href="#about" style={styles.navLink}>About</a>
-                    <a href="#workshop" style={styles.navLink}>Materials</a>
-                    <a href="#contact" style={styles.navLink}>Orders</a>
-                </nav>
-                <input type="text" placeholder="Search" style={styles.searchBar} />
-            </header>
+        <>
 
-            {/* Hero Section */}
-            <div style={styles.heroSection}>
-            <div style={styles.content}>
-            <h1 style={styles.heading}>GROW YOUR BUSINESS WITH US!</h1>
-           <div>
-            <button style={styles.ctaButton}>GET IN TOUCH</button>
-            </div>&nbsp;
-            <div style={styles.socialIcons}>
-                <FaInstagram style={styles.icon} />
-                <FaFacebookF style={styles.icon} />
-                <FaTwitter style={styles.icon} />
-                <FaWhatsapp style={styles.icon} />
-            </div>
-        </div>
-                <div style={styles.sideInfo}>
-                    {/* <h2 style={styles.sideHeading}>NO.1 DIGITAL MARKETING AGENCY</h2> */}
-                    {/* <img src="/businessman.png" alt="Businessman" style={styles.heroImage} /> */}
-                    <LoginPage />
+            {
+                !localStorage.getItem("isAuthenticated") &&
+                <div style={styles.landingPage}>
+                    {/* Header */}
+                    <header style={styles.header}>
+                        <div style={styles.logo}>Landing Page</div>
+                        <nav>
+                            <a href="#home" style={styles.navLink}>Home</a>
+                            <a href="#about" style={styles.navLink}>About</a>
+                            <a href="#workshop" style={styles.navLink}>Materials</a>
+                            <a href="#contact" style={styles.navLink}>Orders</a>
+                        </nav>
+                        <input type="text" placeholder="Search" style={styles.searchBar} />
+                    </header>
+
+                    {/* Hero Section */}
+                    <div style={styles.heroSection}>
+                        <div style={styles.content}>
+                            <h1 style={styles.heading}>GROW YOUR BUSINESS WITH US!</h1>
+                            <div>
+                                <button style={styles.ctaButton}>GET IN TOUCH</button>
+                            </div>&nbsp;
+                            <div style={styles.socialIcons}>
+                                <FaInstagram style={styles.icon} />
+                                <FaFacebookF style={styles.icon} />
+                                <FaTwitter style={styles.icon} />
+                                <FaWhatsapp style={styles.icon} />
+                            </div>
+                        </div>
+                        <div style={styles.sideInfo}>
+                            {/* <h2 style={styles.sideHeading}>NO.1 DIGITAL MARKETING AGENCY</h2> */}
+                            {/* <img src="/businessman.png" alt="Businessman" style={styles.heroImage} /> */}
+                            <LoginPage />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            }
+        </>
     );
 };
 

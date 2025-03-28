@@ -31,9 +31,9 @@ function App() {
             <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
           ) : (
             <>
-              {/* <Route path="/login" element={<Login />} /> */}
+              <Route path="/login" element={<Login />} />
               {/* <Route path="/login" element={<HomePage />} /> */}
-              <Route path="/login" element={<LandingPage />} />
+              {/* <Route path="/login" element={<LandingPage />} /> */}
               <Route path="/home" element={<Dashboard />} />
               <Route path="/toDoList" element={<ToDoList />} />
               {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
