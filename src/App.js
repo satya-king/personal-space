@@ -8,14 +8,16 @@ import LoginPage from "./InitialComponents/LoginPage";
 import HomePage from "./InitialComponents/HomePage";
 import LandingPage from "./InitialComponents/LandingPage";
 import PaymentPage from "./Components/Payments/PaymentPage";
+import Layout from "./InitialComponents/Layout";
+import PrivateRoute from "./InitialComponents/PrivateRoute";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
 
   const handleVerification = () => {
     setIsVerified(true);
-    localStorage.clear()
-    navigate("/login"); // Redirect to login page after verification
+    localStorage.clear();
+    navigate("/login"); // Redirect after verification
   };
 
   return <HumanVerificationMath onVerify={handleVerification} />;
@@ -33,13 +35,12 @@ function App() {
           ) : (
             <>
               <Route path="/login" element={<Login />} />
-              {/* <Route path="/login" element={<HomePage />} /> */}
-              {/* <Route path="/login" element={<LandingPage />} /> */}
-              <Route path="/home" element={<Dashboard />} />
-              <Route path="/toDoList" element={<ToDoList />} />
-              {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
-              <Route path="/PaymentPage" element={<PaymentPage />} />
-             
+
+              <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+                <Route path="/home" element={<Dashboard />} />
+                <Route path="/toDoList" element={<ToDoList />} />
+                <Route path="/PaymentPage" element={<PaymentPage />} />
+              </Route>
             </>
           )
         }

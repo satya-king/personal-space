@@ -32,30 +32,41 @@ body {
 /* Main Content Styling */
 .mainContent {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
+    /* Stack elements vertically */
     justify-content: center;
     align-items: center;
-    position: relative; /* To position the logout button */
+    position: relative;
+    /* To position the logout button */
     padding: 20px;
     border: 2px solid red;
     width: 100%;
-    height: 100%; /* Ensure the content fills the container */
+    height: 100%;
+    /* Ensure the content fills the container */
 }
 
 .mainContent img {
-    width: 100%; /* Make the image take up the full width */
-    height: auto; /* Maintain the aspect ratio */
-    max-width: 500px; /* Set a max width to prevent it from getting too large */
-    object-fit: contain; /* Ensure the image fits properly */
+    width: 100%;
+    /* Make the image take up the full width */
+    height: auto;
+    /* Maintain the aspect ratio */
+    max-width: 500px;
+    /* Set a max width to prevent it from getting too large */
+    object-fit: contain;
+    /* Ensure the image fits properly */
 }
 
 .logout-button {
-    position: absolute; /* Position the button relative to the parent container */
-    top: 20px; /* Set the top distance from the container's top */
-    right: 20px; /* Set the right distance from the container's right side */
+    position: absolute;
+    /* Position the button relative to the parent container */
+    top: 20px;
+    /* Set the top distance from the container's top */
+    right: 20px;
+    /* Set the right distance from the container's right side */
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #f44336; /* Red background for logout button */
+    background-color: #f44336;
+    /* Red background for logout button */
     color: white;
     border: none;
     cursor: pointer;
@@ -63,7 +74,8 @@ body {
 }
 
 .logout-button:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #d32f2f;
+    /* Darker red on hover */
 }
 
 
@@ -129,94 +141,92 @@ body {
 
 /* Sidebar Styling */
 .sidebar {
+    position: sticky;
     top: 0;
     left: 0;
-    width: 15em;
-    background-image: linear-gradient(to top, #eec2c2, #5174d3);
-    color: #0ab9e4;
-    padding: 15px;
-    transition: width 0.3s;
-    z-index: 1000;
+    width: 240px;
     height: 100vh;
+    background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+    color: #ffffff;
+    padding: 20px 15px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    position: sticky;
+    z-index: 1000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar h2 {
-    font-size: 26px;
-    color: #ffffff;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #ffffff;
-    /* Border under the title */
-    padding-bottom: 10px;
+    font-size: 1.5rem;
+    color: #cdc8c7;
+    text-align: center;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
 }
 
 .sidebar ul {
-    list-style-type: none;
-    padding: 0;
+    list-style: none;
+    padding-left: 0;
     margin: 0;
 }
 
-.sidebar ul li {
-    margin: 15px 0;
+.sidebar ul>li {
+    margin-bottom: 1px;
 }
 
-.sidebar ul li a {
-    color: white;
+.sidebar ul>li>a {
+    font-size: 1rem;
+    /* Parent menu title larger */
+    font-weight: 400;
+    /* Bolder parent title */
     text-decoration: none;
-    font-size: 26px;
-    /* Set font size for menu items */
-    transition: color 0.3s ease, transform 0.3s ease;
+    color: #ffffff;
+    padding: 10px 12px;
+    display: block;
+    border-radius: 6px;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.sidebar ul>li>a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.submenu {
+    padding-left: 1rem;
+    margin-top: 6px;
+    display: none;
+}
+
+.submenu.visible {
+    display: block;
 }
 
 .submenu li a {
-    font-size: 22px;
-    /* Set font size for submenu items */
-}
-
-.sidebar ul li :hover {
-    color: #31f31b;
-    font-size: 20px;
-    transform: translateX(15px);
-    transition: transform 0.3s ease;
-}
-
-/* Submenu Styling */
-.submenu {
-    list-style: none;
-    padding-left: 24px;
-    display: none;
-    /* Hidden by default */
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    max-height: 0;
-    /* Initially hidden */
-    opacity: 0;
-}
-
-/* Show submenu if parent is clicked */
-.submenu li {
-    margin: 10px 0;
-    padding-left: 10px;
-}
-
-/* When the submenu is shown */
-.submenu.visible {
+    font-size: 0.85rem;
+    /* Child submenu smaller */
+    font-weight: 300;
+    padding: 8px 10px;
     display: block;
-    max-height: 1000px;
-    opacity: 1;
+    text-decoration: none;
+    color: #d2e0f0;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
 }
 
-/* Active sidebar item styling */
-.sidebar ul li.active a {
-    color: #3bed27;
-    font-weight: bold;
+.submenu li a:hover,
+.submenu li a.active {
+    background-color: rgba(187, 186, 190, 0.15);
+    color: #08e50f;
+    font-weight: 600;
 }
 
-/* Sidebar Scroll */
-.sidebar {
-    overflow-y: auto;
-    /* Enables vertical scrolling for the sidebar */
-}
+
+
+
+
 
 /* Responsive Styles for Sidebar */
 @media screen and (max-width: 768px) {
