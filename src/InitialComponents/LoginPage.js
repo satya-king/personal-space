@@ -40,7 +40,7 @@ const generateCaptcha = () => {
     return captcha.join('');
 };
 const LoginPage = () => {
-    const [loginId, setLoginId] = useState('');
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState('');
     const [captcha, setCaptcha] = useState(generateCaptcha());
     const [captchaInput, setCaptchaInput] = useState('')
@@ -73,7 +73,18 @@ const LoginPage = () => {
     };
 
     const handleLogin = async () => {
-        setError("");  // Clear previous errors
+        setError("");
+
+        // Validate CAPTCHA
+        if (captchaInput.trim() === "") {
+            setError("Please enter the CAPTCHA.");
+            return;
+        }
+
+        if (captchaInput !== captcha) {
+            setError("Invalid CAPTCHA. Please try again.");
+            return;
+        }
 
         try {
             const response = await fetch(BASE_URL, {
@@ -81,14 +92,14 @@ const LoginPage = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ loginId, password })
+                body: JSON.stringify({ username, password })
             });
 
-            const data = await response.text(); // Read response body
+            const data = await response.text();
 
             if (response.ok) {
                 localStorage.setItem("isAuthenticated", "true");
-                localStorage.setItem("loginId", loginId);
+                localStorage.setItem("userName", username);
                 navigate("/home");
             } else {
                 setError(data);
@@ -199,15 +210,17 @@ const LoginPage = () => {
                     ) : (
                         <div style={styles.container}>
                             <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
-                            <form onSubmit={handleLogin}>
+                            <form
+                            // onSubmit={handleLogin}
+                            >
                                 <div>
                                     <label style={styles.label} htmlFor="loginId">Login ID</label>
                                     <input
                                         style={styles.input}
                                         type="text"
                                         id="loginId"
-                                        value={loginId}
-                                        onChange={(e) => setLoginId(e.target.value)}
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -260,8 +273,9 @@ const LoginPage = () => {
                                 </div>
 
                                 <button
-                                    type="submit"
+                                    type="button"
                                     style={styles.submitButton}
+                                    onClick={handleLogin}
                                 >
                                     Login
                                 </button>

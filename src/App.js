@@ -34,7 +34,7 @@ function App() {
             <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
           ) : (
             <>
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<LoginPage />} />
 
               <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
                 <Route path="/home" element={<Dashboard />} />
