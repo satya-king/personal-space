@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BASE_URL } from "../APIURLs/Urls";
+import { API_URL } from "../APIURLs/Urls";
 
 const ForgotPasswordForm = ({ onBackToLogin }) => {
     const [email, setEmail] = useState('');
@@ -96,7 +96,7 @@ const ForgotPasswordForm = ({ onBackToLogin }) => {
 
         try {
             // Simulate API call
-            const response = await fetch(`${BASE_URL}/reset-password`, {
+            const response = await fetch(`${API_URL}/reset-password`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

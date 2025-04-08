@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BiRefresh } from "react-icons/bi";
 import { FaVolumeUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../APIURLs/Urls";
+import { API_URL } from "../APIURLs/Urls";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 
 const generateCaptcha = () => {
@@ -87,7 +87,7 @@ const LoginPage = () => {
         }
 
         try {
-            const response = await fetch(BASE_URL, {
+            const response = await fetch(API_URL+'/login', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
