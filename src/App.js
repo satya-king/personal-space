@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Login from "./InitialComponents/Login";
 import Dashboard from "./InitialComponents/DashBoard";
@@ -41,18 +41,31 @@ function App() {
           <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
         ) : (
           <>
+            {/* Redirect root "/" to "/home" */}
+            <Route path="/" element={<Navigate to="/home" replace />} />
+
             <Route path="/login" element={<LoginPage />} />
 
-            <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+            <Route
+              element={
+                <PrivateRoute>
+                  <Layout />
+                </PrivateRoute>
+              }
+            >
               <Route path="/home" element={<Dashboard />} />
               <Route path="/toDoList" element={<ToDoList />} />
               <Route path="/PaymentPage" element={<PaymentPage />} />
               <Route path="/SampleComponent" element={<SampleComponent />} />
             </Route>
+
+            {/* Optional: 404 page */}
+            <Route path="*" element={<h2>404 Page Not Found</h2>} />
           </>
         )}
       </Routes>
     </Router>
   );
 }
+
 export default App;
