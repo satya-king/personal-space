@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../InitialComponents/LoginStyles.css"; // Adjust path if needed
+import "../InitialComponents/sidebar.css";
 
 const menuData = [
     {
@@ -8,7 +8,9 @@ const menuData = [
         title: "Home",
         subItems: [
             { id: "toDoList", title: "To-Do List", path: "/toDoList" },
-            { id: "homeSub2", title: "Sub Item 2", path: "#" }
+            { id: "homeSub2", title: "Sub Item 2", path: "#" },
+            { id: "homeSub3", title: "Sub Item 3", path: "#" },
+            { id: "homeSub4", title: "Sub Item 4", path: "#" }
         ]
     },
     {
@@ -34,13 +36,20 @@ const Sidebar = () => {
     const [activeItem, setActiveItem] = useState(null);
     const navigate = useNavigate();
 
+    // const toggleMenu = (menuId) => {
+    //     setOpenMenus((prevMenus) =>
+    //         prevMenus.includes(menuId)
+    //             ? prevMenus.filter((id) => id !== menuId)
+    //             : [...prevMenus, menuId]
+    //     );
+    // };
+
     const toggleMenu = (menuId) => {
         setOpenMenus((prevMenus) =>
-            prevMenus.includes(menuId)
-                ? prevMenus.filter((id) => id !== menuId)
-                : [...prevMenus, menuId]
+            prevMenus.includes(menuId) ? [] : [menuId]
         );
     };
+
 
     const handleSubItemClick = (item) => {
         setActiveItem(item.id);
@@ -50,29 +59,29 @@ const Sidebar = () => {
     };
 
     return (
-        <div
-            className="sidebar"
-            style={{
-                backgroundImage: "url(/roboticImage.jpg)",
-                backgroundSize: "auto 100%",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
-            }}
-        >
-            <h2 className="h2">Menu</h2>
-            <ul>
+        <div className="sidebar cyber-sidebar">
+            <h2 className="sidebar-title">💻 Hub</h2>
+            <ul className="sidebar-list">
                 {menuData.map((menuItem) => (
                     <li key={menuItem.id}>
-                        <a href="#" onClick={() => toggleMenu(menuItem.id)}>
+                        <a
+                            href="#"
+                            className="menu-link"
+                            onClick={() => toggleMenu(menuItem.id)}
+                        >
                             {menuItem.title}
                         </a>
-                        <ul className={`submenu ${openMenus.includes(menuItem.id) ? "visible" : ""}`}>
+                        <ul
+                            className={`submenu ${openMenus.includes(menuItem.id) ? "visible" : ""
+                                }`}
+                        >
                             {menuItem.subItems.map((subItem) => (
                                 <li key={subItem.id}>
                                     <a
                                         href="#"
                                         onClick={() => handleSubItemClick(subItem)}
-                                        className={activeItem === subItem.id ? "active" : ""}
+                                        className={`submenu-link ${activeItem === subItem.id ? "active" : ""
+                                            }`}
                                     >
                                         {subItem.title}
                                     </a>
