@@ -4,7 +4,8 @@ import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../APIURLs/Urls";
 import ForgotPasswordForm from "./ForgotPasswordForm";
-import "./LoginPage.css"; 
+import "./LoginPage.css";
+import axiosInstance from "../utils/axiosInstance";
 
 
 const generateCaptcha = () => {
@@ -38,10 +39,15 @@ const LoginPage = () => {
         }
 
         try {
-            const response = await fetch(`${API_URL}/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password }),
+            // const response = await fetch(`${API_URL}/login`, {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ username, password }),
+            // });
+
+            const response = await axiosInstance.post("/login", {
+                username,
+                password,
             });
 
             if (!response.ok) {

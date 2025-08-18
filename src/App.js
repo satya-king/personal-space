@@ -1,12 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Login from "./InitialComponents/Login";
 import Dashboard from "./InitialComponents/DashBoard";
 import HumanVerificationMath from "./Verifications/HumanVerificationMath";
 import ToDoList from "./Components/ToDoList";
 import LoginPage from "./InitialComponents/LoginPage";
-import HomePage from "./InitialComponents/HomePage";
-import LandingPage from "./InitialComponents/LandingPage";
 import PaymentPage from "./Components/Payments/PaymentPage";
 import Layout from "./InitialComponents/Layout";
 import PrivateRoute from "./InitialComponents/PrivateRoute";
@@ -38,12 +35,13 @@ function App() {
     <Router>
       <Routes>
         {!isVerified ? (
-          <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
+          <>
+            <Route path="/verify" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
+            <Route path="*" element={<Navigate to="/verify" replace />} />
+          </>
         ) : (
           <>
-            {/* Redirect root "/" to "/home" */}
             <Route path="/" element={<Navigate to="/home" replace />} />
-
             <Route path="/login" element={<LoginPage />} />
 
             <Route
@@ -59,7 +57,6 @@ function App() {
               <Route path="/SampleComponent" element={<SampleComponent />} />
             </Route>
 
-            {/* Optional: 404 page */}
             <Route path="*" element={<h2>404 Page Not Found</h2>} />
           </>
         )}
