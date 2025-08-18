@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { FaRedo } from "react-icons/fa"; // Importing reload icon
+import { FaRedo, FaArrowLeft } from "react-icons/fa";
 
-const HumanVerificationMath = ({ onVerify }) => {
+const HumanVerificationMath = ({ onVerify, onBack }) => {
     const operations = ["+", "-"];
 
     const generateNewQuestion = () => {
         const num1 = Math.floor(Math.random() * 100) + 1;
-        const num2 = Math.floor(Math.random() * 10) + 1; 
-        const operation = operations[Math.floor(Math.random() * operations.length)];
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        const operation =
+            operations[Math.floor(Math.random() * operations.length)];
         return { num1, num2, operation };
     };
 
@@ -17,9 +18,12 @@ const HumanVerificationMath = ({ onVerify }) => {
 
     const getCorrectAnswer = () => {
         switch (question.operation) {
-            case "+": return question.num1 + question.num2;
-            case "-": return question.num1 - question.num2;
-            default: return null;
+            case "+":
+                return question.num1 + question.num2;
+            case "-":
+                return question.num1 - question.num2;
+            default:
+                return null;
         }
     };
 
@@ -28,9 +32,9 @@ const HumanVerificationMath = ({ onVerify }) => {
         if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
             onVerify(true);
         } else {
-            setError("Incorrect! Try again with a new question.");
+            setError("❌ Incorrect! Try again.");
             setUserAnswer("");
-            setQuestion(generateNewQuestion()); // Rerender new question
+            setQuestion(generateNewQuestion());
         }
     };
 
@@ -41,81 +45,130 @@ const HumanVerificationMath = ({ onVerify }) => {
     };
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.heading}>Verify You Are Human</h2>
-            <div style={styles.questionContainer}>
-                <p style={styles.question}>
-                    Solve this: {question.num1} {question.operation} {question.num2} = ?
-                </p>
-                <FaRedo style={styles.reloadIcon} onClick={handleReload} title="Reload Question" />
+        <div style={styles.fullScreen}>
+            <div style={styles.card}>
+                {/* Back button */}
+                {onBack && (
+                    <button style={styles.backButton} onClick={onBack}>
+                        <FaArrowLeft style={{ marginRight: "6px" }} /> Back
+                    </button>
+                )}
+
+                <h2 style={styles.heading}>🤖 Human Verification</h2>
+                <p style={styles.subHeading}>Please solve the math problem below</p>
+
+                <div style={styles.questionContainer}>
+                    <p style={styles.question}>
+                        {question.num1} {question.operation} {question.num2} = ?
+                    </p>
+                    <FaRedo
+                        style={styles.reloadIcon}
+                        onClick={handleReload}
+                        title="New Question"
+                    />
+                </div>
+
+                <input
+                    type="number"
+                    value={userAnswer}
+                    onChange={(e) => setUserAnswer(e.target.value)}
+                    style={styles.input}
+                    placeholder="Enter your answer"
+                />
+
+                <button onClick={handleVerify} style={styles.verifyButton}>
+                    ✅ Verify
+                </button>
+
+                {error && <p style={styles.error}>{error}</p>}
             </div>
-            <input 
-                type="number" 
-                value={userAnswer} 
-                onChange={(e) => setUserAnswer(e.target.value)}
-                style={styles.input}
-            />
-            <button onClick={handleVerify} style={styles.button}>Verify</button>
-            {error && <p style={styles.error}>{error}</p>}
         </div>
     );
 };
 
 const styles = {
-    container: {
-        textAlign: "center",
-        margin: "50px auto",
+    fullScreen: {
+        height: "100vh",
+        width: "100vw",
+        background: "linear-gradient(135deg, #6dd5ed, #2193b0)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         padding: "20px",
-        maxWidth: "400px",
-        backgroundColor: "#f8f9fa",
-        borderRadius: "10px",
-        boxShadow: "0px 0px 10px rgba(0,0,0,0.1)"
+    },
+    card: {
+        width: "100%",
+        maxWidth: "450px",
+        backgroundColor: "#fff",
+        borderRadius: "15px",
+        boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+        padding: "30px",
+        textAlign: "center",
+        position: "relative",
+    },
+    backButton: {
+        position: "absolute",
+        top: "15px",
+        left: "15px",
+        background: "transparent",
+        border: "none",
+        fontSize: "16px",
+        cursor: "pointer",
+        color: "#007bff",
+        display: "flex",
+        alignItems: "center",
     },
     heading: {
-        fontSize: "22px",
+        fontSize: "26px",
         color: "#333",
-        marginBottom: "10px"
+        marginBottom: "8px",
+    },
+    subHeading: {
+        fontSize: "16px",
+        color: "#666",
+        marginBottom: "20px",
     },
     questionContainer: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginBottom:'3px'
+        marginBottom: "15px",
     },
     question: {
-        fontSize: "18px",
-        color: "#555",
-        marginRight: "10px"
+        fontSize: "22px",
+        fontWeight: "600",
+        color: "#444",
+        marginRight: "10px",
     },
     reloadIcon: {
-        fontSize: "20px",
+        fontSize: "22px",
         cursor: "pointer",
-        color: "#007bff"
+        color: "#007bff",
     },
     input: {
-        padding: "10px",
+        width: "100%",
+        padding: "12px",
         fontSize: "16px",
-        borderRadius: "5px",
+        borderRadius: "8px",
         border: "1px solid #ccc",
-        marginTop:'5px',
-        marginBottom: "5px",
-        width: "80%"
+        marginBottom: "15px",
+        textAlign: "center",
     },
-    button: {
-        padding: "10px 20px",
+    verifyButton: {
+        padding: "12px 25px",
         fontSize: "16px",
-        backgroundColor: "#28a745",
+        background: "linear-gradient(135deg, #28a745, #218838)",
         color: "white",
         border: "none",
-        borderRadius: "5px",
+        borderRadius: "8px",
         cursor: "pointer",
-        marginTop: "10px"
+        transition: "0.3s",
     },
     error: {
         color: "red",
         fontSize: "14px",
-        marginTop: "10px"
-    }
+        marginTop: "12px",
+    },
 };
 
 export default HumanVerificationMath;

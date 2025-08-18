@@ -17,38 +17,42 @@ const HumanVerificationWrapper = ({ setIsVerified }) => {
 
   const handleVerification = () => {
     setIsVerified(true);
-    localStorage.clear();
-    navigate("/login"); // Redirect after verification
+    localStorage.setItem("isVerified", "true");
+
+    if (localStorage.getItem("isAuthenticated")) {
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
   };
 
   return <HumanVerificationMath onVerify={handleVerification} />;
 };
 
 function App() {
-  const [isVerified, setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(
+    () => localStorage.getItem("isVerified") === "true"
+  );
 
   return (
     <Router>
       <Routes>
-        {
-          (!isVerified && !localStorage.getItem('isAuthenticated')) ? (
-            <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
-          ) : (
-            <>
-              <Route path="/login" element={<LoginPage />} />
+        {!isVerified ? (
+          <Route path="*" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
+        ) : (
+          <>
+            <Route path="/login" element={<LoginPage />} />
 
-              <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
-                <Route path="/home" element={<Dashboard />} />
-                <Route path="/toDoList" element={<ToDoList />} />
-                <Route path="/PaymentPage" element={<PaymentPage />} />
-                <Route path="/SampleComponent" element={<SampleComponent />} />
-              </Route>
-            </>
-          )
-        }
+            <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+              <Route path="/home" element={<Dashboard />} />
+              <Route path="/toDoList" element={<ToDoList />} />
+              <Route path="/PaymentPage" element={<PaymentPage />} />
+              <Route path="/SampleComponent" element={<SampleComponent />} />
+            </Route>
+          </>
+        )}
       </Routes>
     </Router>
   );
 }
-
 export default App;

@@ -65,13 +65,6 @@ const HomePage = () => {
     return (
         <Container fluid style={containerStyle}>
             <Row style={rowStyle}>
-                {/* Right Side - Welcome Section */}
-                {/* <Col md={6} style={rightSideStyle}>
-                    <div style={overlayStyle}></div>
-                    <div style={textStyle}>
-                        <h1>Welcome to <br /> Learners World</h1>
-                    </div>
-                </Col> */}
                 <Col md={6} style={{
                     ...rightSideStyle,
                     backgroundImage: 'url(/FastTechnology.png)',
@@ -82,11 +75,9 @@ const HomePage = () => {
                 }}>
                     <div style={overlayStyle}></div>
                     <div style={textStyle}>
-                        {/* <h1>Welcome </h1> */}
                     </div>
                 </Col>
 
-                {/* Left Side - Login Form */}
                 <Col md={6} style={{
                     ...leftSideStyle,
                     backgroundImage: 'url(/.jpg)',

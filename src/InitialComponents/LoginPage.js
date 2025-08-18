@@ -87,7 +87,7 @@ const LoginPage = () => {
         }
 
         try {
-            const response = await fetch(API_URL+'/login', {
+            const response = await fetch(API_URL + '/login', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -282,42 +282,6 @@ const LoginPage = () => {
                                 {error && <p style={{ color: 'red' }}>{error}</p>}
                             </form>
                             &nbsp;
-                            {/* <div style={{
-                            padding: '20px',
-                            background: 'linear-gradient(to right, #00c6ff, #0072ff)', // Gradient background
-                            borderRadius: '5px',
-                            boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
-                            maxWidth: '500px',
-                            height:'40vh',
-                            margin: 'auto',
-                            textAlign: 'center',
-                            color: '#fff'
-                        }}>
-                            <h2 style={{
-                                fontSize: '2.5rem',
-                                fontWeight: 'bold',
-                                color: '#fff',
-                                marginBottom: '20px',
-                                letterSpacing: '1px',
-                                textTransform: 'uppercase'
-                            }}>
-                                Software Development
-                            </h2>
-                            <p style={{
-                                fontSize: '1.2rem',
-                                color: '#f1f1f1',
-                                lineHeight: '1.4',  // Reduced line height to reduce height
-                                fontWeight: '300',
-                                fontFamily: "'Roboto', sans-serif",
-                                marginBottom: '0',
-                                textAlign: 'justify',
-                                width: '100%',  // Increased width (adjust as needed)
-                                padding: '1px',  // Adjust padding for better appearance
-                            }}>
-                                Software development is the process of designing, creating, testing, and maintaining software applications or systems. It involves various stages like planning, coding, debugging, and deploying. With the rapid growth of technology, software development has become a vital part of almost every industry.
-                            </p>
-
-                        </div> */}
                         </div>
                     )}
                 </div>
