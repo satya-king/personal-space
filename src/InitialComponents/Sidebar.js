@@ -60,7 +60,11 @@ const Sidebar = () => {
 
     return (
         <div className="sidebar cyber-sidebar">
-            <h2 className="sidebar-title">💻 Hub</h2>
+            <h2 className="sidebar-title"
+                onClick={() => navigate("/home")} style={{ cursor: "pointer" }}
+            >
+                💻 Hub
+            </h2>
             <ul className="sidebar-list">
                 {menuData.map((menuItem) => (
                     <li key={menuItem.id}>
