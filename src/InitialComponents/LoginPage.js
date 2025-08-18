@@ -1,294 +1,147 @@
 import { useState } from "react";
-import { BiRefresh } from "react-icons/bi";
-import { FaVolumeUp } from "react-icons/fa";
+import { BiRefresh, BiUser } from "react-icons/bi";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../APIURLs/Urls";
 import ForgotPasswordForm from "./ForgotPasswordForm";
+import "./LoginPage.css"; 
+
 
 const generateCaptcha = () => {
-    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-
-    let captcha = [];
-
-    const getRandomChar = (charSet) => {
-        const randomIndex = crypto.getRandomValues(new Uint32Array(1))[0] % charSet.length;
-        return charSet[randomIndex];
-    };
-
-    captcha.push(getRandomChar(uppercase));
-    captcha.push(getRandomChar(lowercase));
-    captcha.push(getRandomChar(numbers));
-
-    // Fill remaining slots with random characters from all categories
-    const allCharacters = uppercase + lowercase + numbers;
-    for (let i = 3; i < 6; i++) {
-        captcha.push(getRandomChar(allCharacters));
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let captcha = "";
+    for (let i = 0; i < 6; i++) {
+        captcha += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-
-    // Securely shuffle the CAPTCHA
-    const secureShuffle = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-            const randomIndex = crypto.getRandomValues(new Uint32Array(1))[0] % (i + 1);
-            [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
-        }
-    };
-
-    secureShuffle(captcha);
-
-    return captcha.join('');
+    return captcha;
 };
+
 const LoginPage = () => {
     const [username, setUsername] = useState("");
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [captcha, setCaptcha] = useState(generateCaptcha());
-    const [captchaInput, setCaptchaInput] = useState('')
-    const [registration, setRegistration] = useState(false)
-    const [showForgotPassword, setShowForgotPassword] = useState(false); // State to toggle forms
-
+    const [captchaInput, setCaptchaInput] = useState("");
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    // Function to regenerate Captcha
-    const handleCaptchaRefresh = () => {
-        setCaptcha(generateCaptcha());
-    }
-
-    const handleVoiceClick = () => {
-        if (!captcha) return; // Ensure captcha exists
-
-        const words = captcha.split(" "); // Split captcha into words
-        words.forEach((word, index) => {
-            setTimeout(() => {
-                const speech = new SpeechSynthesisUtterance(word);
-                speech.lang = "en-US";
-                speech.volume = 1; // Volume level (0 to 1)
-                speech.rate = 0.4; // Rate of speech (0.1 to 10)
-                speech.pitch = 2; // Pitch of speech (0 to 2)
-
-                window.speechSynthesis.speak(speech);
-            }, index * 1000); // Delay each word for natural pacing
-        });
-    };
+    const handleCaptchaRefresh = () => setCaptcha(generateCaptcha());
 
     const handleLogin = async () => {
         setError("");
 
-        // Validate CAPTCHA
-        if (captchaInput.trim() === "") {
-            setError("Please enter the CAPTCHA.");
-            return;
-        }
-
-        if (captchaInput !== captcha) {
+        // Captcha validation
+        if (captchaInput.trim() === "" || captchaInput !== captcha) {
             setError("Invalid CAPTCHA. Please try again.");
             return;
         }
 
         try {
-            const response = await fetch(API_URL + '/login', {
+            const response = await fetch(`${API_URL}/login`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ username, password })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
             });
 
-            const data = await response.text();
-
-            if (response.ok) {
-                localStorage.setItem("isAuthenticated", "true");
-                localStorage.setItem("userName", username);
-                navigate("/home");
-            } else {
-                setError(data);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "Invalid credentials");
             }
+
+            const data = await response.json();
+
+            // Assuming backend returns JWT token
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("isAuthenticated", "true");
+            localStorage.setItem("userName", username);
+
+            navigate("/home");
         } catch (error) {
             console.error("Login Request Failed:", error);
-            setError("Something went wrong. Try again.");
+            setError(error.message || "Something went wrong. Try again.");
         }
     };
 
-    // Inline styles
-    const styles = {
-        container: {
-            maxWidth: '500px',
-            margin: '0 auto',
-            padding: '80px',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            backgroundColor: '#f9f9f9',
-        },
-        heading: {
-            textAlign: 'center',
-            fontSize: '2rem',         // Larger font size for emphasis
-            fontWeight: 'bold',       // Makes the text bold
-            color: '#333',            // Dark gray color for readability
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)',  // Adds a subtle shadow effect
-            margin: '20px 0',         // Adds margin above and below
-            fontFamily: "'Arial', sans-serif",  // Clean and modern font
-        },
-        label: {
-            display: 'block',
-            marginBottom: '8px',
-            textAlign: 'left',
-            fontWeight: 'bold',
-        },
-        input: {
-            width: '100%',
-            padding: '10px',
-            marginBottom: '12px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-        },
-        captchaContainer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        captchaButton: {
-            padding: '5px 10px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-        },
-        captchaButtonHover: {
-            backgroundColor: '#0056b3',
-        },
-        voiceButton: {
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '0',
-        },
-        submitButton: {
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-        },
-        submitButtonHover: {
-            backgroundColor: '#218838',
-        },
-    };
-
-    const forgotPasswordStyle = {
-        textAlign: "right",
-        fontWeight: 'bold',
-        color: "red",
-        fontSize: "15px",
-        cursor: "pointer",
-    };
-
-    const registerContainerStyle = {
-        marginTop: "20px",
-        fontSize: "15px",
-    };
-
-    const registerLinkStyle = {
-        fontWeight: "bold",
-        color: "#C76A13", // Orange shade
-        cursor: "pointer",
-        textDecoration: "none",
-    };
-
-
     return (
-        <>
+        <div className="login-background">
+            <div className="login-overlay">
+                <div className="login-card">
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+                        alt="App Logo"
+                        className="login-logo"
+                    />
+                    <h2 className="login-title">Welcome Back 👋</h2>
+                    <p className="login-subtitle">Please login to continue</p>
 
-            {
-                !localStorage.getItem("isAuthenticated") &&
-                <div>
                     {showForgotPassword ? (
                         <ForgotPasswordForm onBackToLogin={() => setShowForgotPassword(false)} />
                     ) : (
-                        <div style={styles.container}>
-                            <h2 style={styles.heading}><u>Please Enter Your Details</u></h2>
-                            <form
-                            // onSubmit={handleLogin}
-                            >
-                                <div>
-                                    <label style={styles.label} htmlFor="loginId">Login ID</label>
-                                    <input
-                                        style={styles.input}
-                                        type="text"
-                                        id="loginId"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                        <>
+                            <div className="login-input-group">
+                                <BiUser size={20} className="login-icon" />
+                                <input
+                                    className="login-input"
+                                    type="text"
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                            </div>
 
-                                <div>
-                                    <label style={styles.label} htmlFor="password">Password</label>
-                                    <input
-                                        style={styles.input}
-                                        type="password"
-                                        id="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div style={forgotPasswordStyle} onClick={() => setShowForgotPassword(true)}>
-                                    <u>Forgot Password?</u>
-                                </div>
-
-                                <div>
-                                    <label style={styles.label} htmlFor="captcha">Captcha: &nbsp;
-                                        <span style={{
-                                            display: 'inline-block',
-                                            padding: '0px 5px',
-                                            border: '2px solid black',
-                                            borderRadius: '5px',
-                                            fontSize: '24px',
-                                            fontWeight: 'bold',
-                                            fontFamily: "'Courier New', monospace",
-                                            letterSpacing: '3px',
-                                            background: 'linear-gradient(to right, #f7f7f7, #e0e0e0)',
-                                            color: '#333',
-                                            textAlign: 'center',
-                                            boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-                                            userSelect: 'none',
-                                        }}>
-                                            {captcha}
-                                        </span>
-                                        <span><BiRefresh onClick={handleCaptchaRefresh} size={35} /></span>
-                                    </label>
-                                    <input
-                                        style={styles.input}
-                                        type="text"
-                                        id="captchaInput"
-                                        value={captchaInput}
-                                        onChange={(e) => setCaptchaInput(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <button
-                                    type="button"
-                                    style={styles.submitButton}
-                                    onClick={handleLogin}
+                            <div className="login-input-group">
+                                <FaLock size={20} className="login-icon" />
+                                <input
+                                    className="login-input"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <span
+                                    className="password-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
                                 >
-                                    Login
-                                </button>
-                                {error && <p style={{ color: 'red' }}>{error}</p>}
-                            </form>
-                            &nbsp;
-                        </div>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+
+                            <div
+                                className="login-forgot"
+                                onClick={() => setShowForgotPassword(true)}
+                            >
+                                Forgot Password?
+                            </div>
+
+                            <div className="login-captcha-box">
+                                <span className="login-captcha">{captcha}</span>
+                                <BiRefresh
+                                    size={25}
+                                    onClick={handleCaptchaRefresh}
+                                    className="login-refresh-icon"
+                                />
+                            </div>
+
+                            <input
+                                className="login-input"
+                                type="text"
+                                placeholder="Enter CAPTCHA"
+                                value={captchaInput}
+                                onChange={(e) => setCaptchaInput(e.target.value)}
+                            />
+
+                            <button className="login-button" onClick={handleLogin}>
+                                Login
+                            </button>
+
+                            {error && <p className="login-error">{error}</p>}
+                        </>
                     )}
                 </div>
-            }
-
-        </>
+            </div>
+        </div>
     );
-}
+};
 
 export default LoginPage;
