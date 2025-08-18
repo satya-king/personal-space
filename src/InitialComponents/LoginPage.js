@@ -50,17 +50,20 @@ const LoginPage = () => {
                 password,
             });
 
-            if (!response.ok) {
+            console.log("Login Response:", response);
+            
+
+            if (!response.status || response.status !== 200) {
                 const errorText = await response.text();
                 throw new Error(errorText || "Invalid credentials");
             }
 
-            const data = await response.json();
+
 
             // Assuming backend returns JWT token
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token", response.data.token);
             localStorage.setItem("isAuthenticated", "true");
-            localStorage.setItem("userName", username);
+            localStorage.setItem("userName", response.data.username);
 
             navigate("/home");
         } catch (error) {
