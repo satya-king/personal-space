@@ -1,0 +1,101 @@
+/* Container */
+.payment-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  background: #f3f4f6; /* light gray */
+  padding: 24px;
+}
+
+/* Card */
+.payment-card {
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  padding: 26px;
+  text-align: center;
+}
+
+/* Title */
+.payment-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937; /* dark gray */
+  margin-bottom: 20px;
+}
+
+/* Label */
+.payment-label {
+  display: block;
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Input */
+.payment-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+.payment-input:focus {
+  outline: none;
+  border-color: #2563eb; /* blue */
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Button */
+.pay-button {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+  background: #2563eb;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.pay-button:hover {
+  background: #1d4ed8;
+}
+.pay-button.disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* QR Section */
+.qr-section {
+  margin-top: 24px;
+}
+.qr-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #374151;
+}
+.qr-box {
+  display: flex;
+  justify-content: center;
+}
+
+/* Payment Status */
+.payment-status {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.payment-status.success {
+  color: #16a34a;
+}
+.payment-status.failed {
+  color: #dc2626;
+}

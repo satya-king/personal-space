@@ -21,7 +21,7 @@ const Layout = () => {
 
             {/* Sticky Footer */}
             <footer style={styles.footer}>
-                <p>© {new Date().getFullYear()} Learn. All Rights Reserved.</p>
+                <p>© {new Date().getFullYear()} Satya. All Rights Reserved.</p>
             </footer>
         </div>
     );

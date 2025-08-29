@@ -1,68 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import QRCode from 'react-qr-code';
-import axios from 'axios';
-import { API_URL } from '../../APIURLs/Urls';
+import React, { useState } from "react";
+import QRCode from "react-qr-code";
+import axios from "axios";
+import { API_URL } from "../../APIURLs/Urls";
+import "./payment.css";
 
 function PaymentPage() {
-    const [qrCode, setQrCode] = useState(null);
-    const [upiId, setUpiId] = useState('satya0003@ybl');
-    const [paymentStatus, setPaymentStatus] = useState('');
+    const [paymentLink, setPaymentLink] = useState(null);
+    const [paymentLinkId, setPaymentLinkId] = useState(null);
+    const [paymentStatus, setPaymentStatus] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handlePayNow = async () => {
         try {
-            const response = await axios.post(API_URL + '/api/payment/generate', { upiId });
-            setQrCode(response.data.qrCode);
-            checkPaymentStatus(response.data.transactionId);
+            setLoading(true);
+            setPaymentStatus("");
+
+            const response = await axios.post(`${API_URL}/razorpay/create-payment-link`, {
+                amount: 500, // fixed amount
+                description: "Payment for Order #123",
+                name: "Satya",
+                email: "satya@gmail.com",
+                contact: "9876543210"
+            });
+
+            if (response.data.error) {
+                setPaymentStatus("FAILED TO CREATE LINK");
+                return;
+            }
+
+            setPaymentLink(response.data.shortUrl);
+            setPaymentLinkId(response.data.paymentLinkId);
+
+            // start polling payment status
+            pollPaymentStatus(response.data.paymentLinkId);
+
         } catch (error) {
-            console.error('Error generating QR Code:', error);
+            setPaymentStatus("FAILED");
+            console.error("Error creating payment link:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const checkPaymentStatus = (transactionId) => {
+    const pollPaymentStatus = (paymentLinkId) => {
         const interval = setInterval(async () => {
             try {
-                const response = await axios.get(API_URL+`/api/payment/status/${transactionId}`);
+                const response = await axios.get(`${API_URL}/razorpay/status/${paymentLinkId}`);
                 setPaymentStatus(response.data.status);
 
-                if (response.data.status === 'SUCCESS' || response.data.status === 'FAILED') {
+                if (response.data.status === "paid" || response.data.status === "expired") {
                     clearInterval(interval);
                 }
             } catch (error) {
-                console.error('Error checking payment status:', error);
+                console.error("Error fetching status:", error);
             }
-        }, 5000); // Poll every 5 seconds
+        }, 5000);
     };
 
-    return React.createElement(
-        'div',
-        { className: 'p-8' },
-        React.createElement('h1', { className: 'text-2xl font-bold mb-4' }, 'UPI Payment'),
+    return (
+        <div className="payment-container">
+            <div className="payment-card">
+                <h1 className="payment-title">UPI Payment</h1>
 
-        React.createElement('label', { className: 'block mb-2' }, 'Enter UPI ID (optional for QR payment):'),
-        React.createElement('input', {
-            type: 'text',
-            value: upiId,
-            onChange: (e) => setUpiId(e.target.value),
-            className: 'border rounded p-2 w-full mb-4',
-        }),
+                <button onClick={handlePayNow} disabled={loading} className="pay-button">
+                    {loading ? "Creating Link..." : "Generate Payment Link"}
+                </button>
 
-        React.createElement('button', {
-            onClick: handlePayNow,
-            className: 'bg-blue-500 text-white px-4 py-2 rounded',
-        }, 'Pay Now'),
+                {paymentLink && (
+                    <div className="qr-section">
+                        <h2 className="qr-title">Scan QR or Click to Pay</h2>
+                        <div className="qr-box">
+                            <QRCode value={paymentLink} size={180} />
+                        </div>
+                        <a
+                            href={paymentLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="pay-button"
+                        >
+                            Open Payment Page
+                        </a>
+                    </div>
+                )}
 
-        qrCode ? React.createElement(
-            'div',
-            { className: 'mt-6' },
-            React.createElement('h2', { className: 'text-xl' }, 'Scan this QR Code to Pay:'),
-            React.createElement(QRCode, { value: qrCode })
-        ) : null,
-
-        paymentStatus ? React.createElement(
-            'div',
-            { className: `mt-6 text-xl ${paymentStatus === 'SUCCESS' ? 'text-green-500' : 'text-red-500'}` },
-            `Payment Status: ${paymentStatus}`
-        ) : null
+                {paymentStatus && (
+                    <div
+                        className={`payment-status ${paymentStatus === "paid" ? "success" : "failed"
+                            }`}
+                    >
+                        Payment Status: {paymentStatus.toUpperCase()}
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }
 
