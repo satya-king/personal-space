@@ -60,17 +60,20 @@ function PaymentPage() {
     return (
         <div className="payment-container">
             <div className="payment-card">
-                <h1 className="payment-title">UPI Payment</h1>
+                <h1 className="payment-title">💳 UPI Payment</h1>
 
-                <button onClick={handlePayNow} disabled={loading} className="pay-button">
-                    {loading ? "Creating Link..." : "Generate Payment Link"}
+                <button
+                    onClick={handlePayNow}
+                    className="generate-btn"
+                >
+                    Generate Payment Link
                 </button>
 
                 {paymentLink && (
                     <div className="qr-section">
-                        <h2 className="qr-title">Scan QR or Click to Pay</h2>
+                        <h2 className="qr-title">Scan & Pay</h2>
                         <div className="qr-box">
-                            <QRCode value={paymentLink} size={180} />
+                            <QRCode value={paymentLink} size={200} />
                         </div>
                         <a
                             href={paymentLink}
@@ -78,21 +81,19 @@ function PaymentPage() {
                             rel="noopener noreferrer"
                             className="pay-button"
                         >
-                            Open Payment Page
+                            Open in UPI App
                         </a>
                     </div>
                 )}
 
                 {paymentStatus && (
-                    <div
-                        className={`payment-status ${paymentStatus === "paid" ? "success" : "failed"
-                            }`}
-                    >
-                        Payment Status: {paymentStatus.toUpperCase()}
+                    <div className={`payment-status ${paymentStatus.toLowerCase()}`}>
+                        Status: {paymentStatus}
                     </div>
                 )}
             </div>
         </div>
+
     );
 }
 
