@@ -8,6 +8,7 @@ import PaymentPage from "./Components/Payments/PaymentPage";
 import Layout from "./InitialComponents/Layout";
 import PrivateRoute from "./InitialComponents/PrivateRoute";
 import SampleComponent from "./Components/SampleComponent";
+import PaymentByScanning from "./Components/Payments/PaymentByScanning";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ function App() {
               <Route path="/home" element={<Dashboard />} />
               <Route path="/toDoList" element={<ToDoList />} />
               <Route path="/PaymentPage" element={<PaymentPage />} />
+              <Route path="/PaymentByScanning" element={<PaymentByScanning />} />
               <Route path="/SampleComponent" element={<SampleComponent />} />
             </Route>
 
