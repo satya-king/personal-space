@@ -8,11 +8,11 @@ import { LoaderProvider } from "./InitialComponents/LoaderContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <LoaderProvider>
-      <App />
-    </LoaderProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <LoaderProvider>
+    <App />
+  </LoaderProvider>
+  // </React.StrictMode>
 );
 
 reportWebVitals();
