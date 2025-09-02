@@ -28,6 +28,14 @@ const menuData = [
             { id: "contactSub1", title: "Sub Item 1", path: "#" },
             { id: "contactSub2", title: "Sub Item 2", path: "#" }
         ]
+    },
+    {
+        id: "payment",
+        title: "Payements",
+        subItems: [
+            { id: "pay1", title: "Razor", path: "/PaymentPage" },
+            { id: "pay2", title: "QR Payement", path: "/PaymentByScanning" }
+        ]
     }
 ];
 
