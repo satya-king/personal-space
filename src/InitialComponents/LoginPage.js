@@ -53,15 +53,16 @@ const LoginPage = () => {
             console.log("Login Response:", response);
             
 
-            if (!response.status || response.status !== 200) {
-                const errorText = await response.text();
-                throw new Error(errorText || "Invalid credentials");
-            }
+            // if (!response.status || response.status !== 200) {
+            //     const errorText = await response.text();
+            //     throw new Error(errorText || "Invalid credentials");
+            // }
 
 
 
             // Assuming backend returns JWT token
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("refreshToken", response.data.refreshToken);
             localStorage.setItem("isAuthenticated", "true");
             localStorage.setItem("userName", response.data.username);
 

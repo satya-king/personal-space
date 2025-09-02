@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import axios from "axios";
 import { API_URL } from "../../APIURLs/Urls";
 import "./payment.css";
+import CommonAPICallsService from "../../utils/CommonAPICallsService";
 
 function PaymentByScanning() {
   const [upiId, setUpiId] = useState("");
@@ -14,7 +15,7 @@ function PaymentByScanning() {
   useEffect(() => {
     const fetchUPI = async () => {
       try {
-        const response = await axios.get(API_URL + "/api/payment/qr");
+        const response = await CommonAPICallsService.getPaymentQR();
         setUpiData(response.data);
       } catch (error) {
         console.error("Error fetching UPI QR:", error);
@@ -107,9 +108,8 @@ function PaymentByScanning() {
         {/* Payment Status */}
         {paymentStatus && (
           <div
-            className={`payment-status ${
-              paymentStatus === "SUCCESS" ? "success" : "failed"
-            }`}
+            className={`payment-status ${paymentStatus === "SUCCESS" ? "success" : "failed"
+              }`}
           >
             Payment Status: {paymentStatus}
           </div>
