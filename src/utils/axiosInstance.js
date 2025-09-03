@@ -92,6 +92,8 @@ axiosInstance.interceptors.response.use(
                 showNotification("error", "Your session has expired. Please log in again.", "/login");
                 return Promise.reject(refreshError);
             }
+        } else if (error.response && error.response.status === 403) {
+            showNotification("error", error.response.data || "Access Denied.");
         }
 
         return Promise.reject(error);
