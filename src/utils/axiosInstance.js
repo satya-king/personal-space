@@ -7,22 +7,27 @@ const axiosInstance = axios.create({
     baseURL: API_URL,
 });
 
+// Track refresh state
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function onRefreshed(token) {
+    refreshSubscribers.forEach((callback) => callback(token));
+    refreshSubscribers = [];
+}
+
+function addSubscriber(callback) {
+    refreshSubscribers.push(callback);
+}
+
 // 🔹 Request Interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
         loaderHandler.show();
-
-        if (!config.url.includes("/login") && !config.url.includes("/refresh-token")) {
-            const token = localStorage.getItem("token");
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
         }
-
-        // const token = localStorage.getItem("token"); // get access token
-        // if (token) {
-        //     config.headers.Authorization = `Bearer ${token}`;
-        // }
         return config;
     },
     (error) => {
@@ -39,50 +44,58 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         loaderHandler.hide();
+        const originalRequest = error.config;
 
-        if (error.response && error.response.status === 401) {
-            // 🔴 Prevent infinite loop on refresh-token call
-            if (error.config.url.includes("/refresh-token")) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("refreshToken");
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
 
+            if (isRefreshing) {
+                // Wait for ongoing refresh to finish
+                return new Promise((resolve) => {
+                    addSubscriber((token) => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        resolve(axiosInstance(originalRequest));
+                    });
+                });
+            }
+
+            isRefreshing = true;
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            if (!refreshToken) {
+                localStorage.clear();
                 showNotification("error", "Your session has expired. Please log in again.", "/login");
-
                 return Promise.reject(error);
             }
 
-            const refreshToken = localStorage.getItem("refreshToken");
+            try {
+                const res = await axios.post(`${API_URL}/refresh-token`, {
+                    refreshToken: refreshToken,
+                });
 
-            if (refreshToken) {
-                try {
-                    const res = await axios.post(`${API_URL}/refresh-token`, {
-                        refreshToken: refreshToken,
-                    });
+                const newAccessToken = res.data.token;
+                const newRefreshToken = res.data.refreshToken;
 
-                    const newAccessToken = res.data.token;
-                    const newRefreshToken = res.data.refreshToken;
+                localStorage.setItem("token", newAccessToken);
+                localStorage.setItem("refreshToken", newRefreshToken);
 
-                    localStorage.setItem("token", newAccessToken);
-                    localStorage.setItem("refreshToken", newRefreshToken);
+                axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+                onRefreshed(newAccessToken);
+                isRefreshing = false;
 
-                    error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-                    return axiosInstance(error.config);
-                } catch (refreshError) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refreshToken");
-
-                    showNotification("error", "Your session has expired. Please log in again.", "/login");
-                }
-            } else {
+                // Retry original failed request
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return axiosInstance(originalRequest);
+            } catch (refreshError) {
+                isRefreshing = false;
+                localStorage.clear();
                 showNotification("error", "Your session has expired. Please log in again.", "/login");
+                return Promise.reject(refreshError);
             }
         }
 
         return Promise.reject(error);
     }
 );
-
-
-
 
 export default axiosInstance;

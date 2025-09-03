@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { API_URL } from "../APIURLs/Urls";
 
-const API_URL = "https://todo-list-db-ax92.onrender.com";
 
 const ToDoList = () => {
     const [todos, setTodos] = useState([]);
@@ -21,7 +21,7 @@ const ToDoList = () => {
         });
         const data = await response.json();
         setTodos([...todos, data]);
-    }; 
+    };
 
     return (
         <div>

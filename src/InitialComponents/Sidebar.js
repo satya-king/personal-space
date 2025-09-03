@@ -25,7 +25,7 @@ const menuData = [
         id: "contact",
         title: "Contact",
         subItems: [
-            { id: "contactSub1", title: "Sub Item 1", path: "#" },
+            { id: "contactSub1", title: "Aadhar OTP", path: "/AadharOTPValidation" },
             { id: "contactSub2", title: "Sub Item 2", path: "#" }
         ]
     },
@@ -77,7 +77,7 @@ const Sidebar = () => {
                 {menuData.map((menuItem) => (
                     <li key={menuItem.id}>
                         <a
-                            href="#"
+                            href={menuItem.path || "#"}
                             className="menu-link"
                             onClick={() => toggleMenu(menuItem.id)}
                         >
@@ -90,7 +90,7 @@ const Sidebar = () => {
                             {menuItem.subItems.map((subItem) => (
                                 <li key={subItem.id}>
                                     <a
-                                        href="#"
+                                        href={subItem.path || "#"}
                                         onClick={() => handleSubItemClick(subItem)}
                                         className={`submenu-link ${activeItem === subItem.id ? "active" : ""
                                             }`}

@@ -1,0 +1,78 @@
+.aadhar-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+.aadhar-card {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  width: 450px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.aadhar-form .form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.aadhar-form label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #444;
+}
+
+.aadhar-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn.primary {
+  background: #3085d6;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #246bb0;
+}
+
+.btn.secondary {
+  background: #f0f0f0;
+  color: #333;
+  margin-top: 5px;
+}
+
+.btn.secondary:hover {
+  background: #e0e0e0;
+}
+
+.aadhar-details {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9fafc;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}

@@ -9,6 +9,7 @@ import Layout from "./InitialComponents/Layout";
 import PrivateRoute from "./InitialComponents/PrivateRoute";
 import SampleComponent from "./Components/SampleComponent";
 import PaymentByScanning from "./Components/Payments/PaymentByScanning";
+import AadharOTPValidation from "./Components/ThirdPartyRelated/AadharOTPValidation";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ function App() {
               <Route path="/PaymentPage" element={<PaymentPage />} />
               <Route path="/PaymentByScanning" element={<PaymentByScanning />} />
               <Route path="/SampleComponent" element={<SampleComponent />} />
+              <Route path="/AadharOTPValidation" element={<AadharOTPValidation />} />
             </Route>
 
             <Route path="*" element={<h2>404 Page Not Found</h2>} />

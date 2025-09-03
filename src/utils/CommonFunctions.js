@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import axios from 'axios'
 
 export const showNotification = (type, message, redirectUrl = null) => {
     let icon = "info";
@@ -26,3 +27,12 @@ export const showNotification = (type, message, redirectUrl = null) => {
         }
     });
 };
+
+
+export const getTokenFromLocalStorage = async () => {
+    let token = ''
+    token = localStorage.getItem('token')
+    if (token !== '' && token !== undefined && token !== null) {
+        return token
+    }
+}
