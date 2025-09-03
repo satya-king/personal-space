@@ -3,6 +3,9 @@ import { API_URL } from "../APIURLs/Urls";
 import { loaderHandler } from "./loaderHandler";
 import { showNotification } from "./CommonFunctions";
 
+const loginOrPublicEndpoints = [`${API_URL}/login`, `${API_URL}/register`];
+
+
 const axiosInstance = axios.create({
     baseURL: API_URL,
 });
@@ -46,7 +49,8 @@ axiosInstance.interceptors.response.use(
         loaderHandler.hide();
         const originalRequest = error.config;
 
-        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        if (error.response && error.response.status === 401
+            && !originalRequest._retry && !loginOrPublicEndpoints.includes(originalRequest.url)) {
             originalRequest._retry = true;
 
             if (isRefreshing) {

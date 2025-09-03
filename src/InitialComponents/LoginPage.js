@@ -6,6 +6,7 @@ import { API_URL } from "../APIURLs/Urls";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import "./LoginPage.css";
 import axiosInstance from "../utils/axiosInstance";
+import { showNotification } from "../utils/CommonFunctions";
 
 
 const generateCaptcha = () => {
@@ -30,11 +31,14 @@ const LoginPage = () => {
     const handleCaptchaRefresh = () => setCaptcha(generateCaptcha());
 
     const handleLogin = async () => {
+        console.log("Attempting login with:", { username, password, captchaInput, captcha });
+
         setError("");
 
         // Captcha validation
         if (captchaInput.trim() === "" || captchaInput !== captcha) {
-            setError("Invalid CAPTCHA. Please try again.");
+            showNotification("error", "Invalid CAPTCHA. Please try again.");
+            setCaptcha(generateCaptcha());
             return;
         }
 
@@ -146,7 +150,7 @@ const LoginPage = () => {
                                 Login
                             </button>
 
-                            {error && <p className="login-error">{error}</p>}
+                            {/* {error && <p className="login-error">{error}</p>} */}
                         </>
                     )}
                 </div>
