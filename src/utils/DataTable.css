@@ -1,6 +1,6 @@
 .table-container {
   margin: 20px auto;
-  max-width: 900px;
+  max-width: 100%;
   padding: 16px;
   background: #fff;
   border-radius: 8px;
@@ -39,9 +39,14 @@
   background: #0056b3;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+}
+
 .styled-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .styled-table th,
@@ -49,11 +54,16 @@
   padding: 12px;
   text-align: left;
   border: 1px solid #ddd;
+  min-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .styled-table th {
+  position: relative;
   background: #f4f4f4;
-  cursor: pointer;
+  user-select: none;
 }
 
 .styled-table tr:nth-child(even) {
@@ -68,4 +78,21 @@
   text-align: center;
   padding: 16px;
   color: #666;
+}
+
+.th-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding-right: 10px;
+}
+
+.resize-handle {
+  width: 8px;
+  cursor: col-resize;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
 }

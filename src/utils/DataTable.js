@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import * as XLSX from "xlsx";
+import "./DataTable.css";
 
 function DataTable({ title, columns, data }) {
     const [expanded, setExpanded] = useState(true);
@@ -45,6 +46,24 @@ function DataTable({ title, columns, data }) {
         XLSX.writeFile(workbook, `${title || "TableData"}.xlsx`);
     };
 
+    const handleMouseDown = (e, th) => {
+        const startX = e.clientX;
+        const startWidth = th.offsetWidth;
+
+        const handleMouseMove = (e) => {
+            const newWidth = startWidth + (e.clientX - startX);
+            th.style.width = `${newWidth}px`;
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+    };
+
     return (
         <div className="table-container">
             <div className="table-header">
@@ -64,38 +83,46 @@ function DataTable({ title, columns, data }) {
             </div>
 
             {expanded && (
-                <table className="styled-table">
-                    <thead>
-                        <tr>
-                            {columns.map((col) => (
-                                <th key={col.key} onClick={() => handleSort(col.key)}>
-                                    {col.label}
-                                    {sortConfig.key === col.key &&
-                                        (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredData.length > 0 ? (
-                            filteredData.map((row, i) => (
-                                <tr key={i}>
-                                    {columns.map((col) => (
-                                        <td key={col.key}>
-                                            {col.render ? col.render(row[col.key], row) : row[col.key]}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : (
+                <div className="table-wrapper">
+                    <table className="styled-table">
+                        <thead>
                             <tr>
-                                <td colSpan={columns.length} className="no-data">
-                                    No data found
-                                </td>
+                                {columns.map((col) => (
+                                    <th key={col.key} onClick={() => handleSort(col.key)} style={{ borderLeft: "1px solid #4800ffff" }}>
+                                        <div className="th-content" >
+                                            {col.label}
+                                            {sortConfig.key === col.key &&
+                                                (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+                                            <span
+                                                className="resize-handle" style={{ borderLeft: "5px solid #ab9f9fff" }}
+                                                onMouseDown={(e) => handleMouseDown(e, e.target.parentElement.parentElement)}
+                                            />
+                                        </div>
+                                    </th>
+                                ))}
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {filteredData.length > 0 ? (
+                                filteredData.map((row, i) => (
+                                    <tr key={i}>
+                                        {columns.map((col) => (
+                                            <td key={col.key}>
+                                                {col.render ? col.render(row[col.key], row) : row[col.key]}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={columns.length} className="no-data">
+                                        No data found
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );

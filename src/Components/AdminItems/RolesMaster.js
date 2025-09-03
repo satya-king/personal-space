@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "../../utils/DataTable";
-import "../../utils/table.css";
 import CommonAPICallsService from "../../utils/CommonAPICallsService";
 
 function RolesMaster() {
@@ -8,18 +7,19 @@ function RolesMaster() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
-        const response = CommonAPICallsService.getMasterRoles();
-        response
-            .then((res) => {
+        async function fetchRoles() {
+            try {
+                const res = await CommonAPICallsService.getMasterRoles();
                 setRoles(res.data);
-                setLoading(false);
-            })
-            .catch((err) => {
+            } catch (err) {
                 console.error("Error fetching roles:", err);
+            } finally {
                 setLoading(false);
-            });
+            }
+        }
+        fetchRoles();
     }, []);
+
 
     if (loading) return <div>Loading roles...</div>;
 
