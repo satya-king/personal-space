@@ -14,6 +14,14 @@ const menuData = [
         ]
     },
     {
+        id: "admin",
+        title: "Admin",
+        subItems: [
+            { id: "rolesMaster", title: "Roles Master", path: "/RolesMaster" },
+            { id: "aboutSub2", title: "Sub Item 2", path: "#" }
+        ]
+    },
+    {
         id: "about",
         title: "About",
         subItems: [

@@ -10,6 +10,7 @@ import PrivateRoute from "./InitialComponents/PrivateRoute";
 import SampleComponent from "./Components/SampleComponent";
 import PaymentByScanning from "./Components/Payments/PaymentByScanning";
 import AadharOTPValidation from "./Components/ThirdPartyRelated/AadharOTPValidation";
+import RolesMaster from "./Components/AdminItems/RolesMaster";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -59,6 +60,14 @@ function App() {
               <Route path="/PaymentByScanning" element={<PaymentByScanning />} />
               <Route path="/SampleComponent" element={<SampleComponent />} />
               <Route path="/AadharOTPValidation" element={<AadharOTPValidation />} />
+
+
+
+
+              <Route path="/RolesMaster" element={<RolesMaster />} />
+
+
+
             </Route>
 
             <Route path="*" element={<h2>404 Page Not Found</h2>} />

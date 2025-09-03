@@ -1,4 +1,4 @@
-import { LOGOUT, PAYMENT_QR } from "./APIEndPoints";
+import { GET_MASTER_ROLES, LOGOUT, PAYMENT_QR } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -9,6 +9,9 @@ class CommonAPICallsService {
 
     getPaymentQR() {
         return axiosInstance.get(PAYMENT_QR);
+    }
+    getMasterRoles() {
+        return axiosInstance.get(GET_MASTER_ROLES);
     }
 }
 
