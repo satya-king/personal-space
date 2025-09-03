@@ -5,6 +5,44 @@ import { IoMdLogOut } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
 
+// role-based style mapping
+const getRoleStyle = (roleId) => {
+    const base = {
+        padding: "4px 10px",
+        borderRadius: "20px",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "16px",
+        fontWeight: "500",
+        transition: "0.3s",
+    };
+
+    switch (roleId) {
+        case 99: // GOD USER
+            return { ...base, background: "#ffe6e6", color: "red", fontWeight: "bold" };
+        case 1: // ADMIN USER
+            return { ...base, background: "#e6ffe6", color: "green" };
+        case 3: // PREMIUM USER
+            return { ...base, background: "#fff8dc", color: "gold", fontWeight: "bold" };
+        case 4: // POWER USER
+            return { ...base, background: "#fff0e0", color: "orange" };
+        default: // Normal User
+            return { ...base, background: "rgba(255,255,255,0.15)", color: "#fff" };
+    }
+};
+
+// role-based icon mapping
+const getRoleIcon = (roleId) => {
+    switch (roleId) {
+        case 99: return "👑"; // GOD USER
+        case 1: return "🛡️"; // ADMIN USER
+        case 3: return "⭐"; // PREMIUM USER
+        case 4: return "⚡"; // POWER USER
+        default: return "👤"; // Normal User
+    }
+};
+
 const StickerHeader = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const navigate = useNavigate();
@@ -22,6 +60,8 @@ const StickerHeader = () => {
             if (result.isConfirmed) {
                 Swal.fire("Success", "Logged out successfully", "success");
                 localStorage.removeItem("isAuthenticated");
+                localStorage.removeItem("roleId");
+                localStorage.removeItem("userName");
                 navigate("/login");
             }
         });
@@ -29,8 +69,11 @@ const StickerHeader = () => {
 
     const handleBack = () => navigate(-1);
     const handleHome = () => navigate("/home");
-
     const toggleDropdown = () => setDropdownVisible((prev) => !prev);
+
+    // get stored role + username
+    const roleId = Number(localStorage.getItem("roleId"));
+    const userName = localStorage.getItem("userName") || "User";
 
     return (
         <div style={styles.headerContainer}>
@@ -44,10 +87,9 @@ const StickerHeader = () => {
             <div style={styles.rightSection}>
                 <div style={styles.usernameContainer} onClick={toggleDropdown}>
                     <FaUserCircle size={26} style={styles.userIcon} />
-                    <span style={styles.username}>
-                        {localStorage.getItem("userName") || "User"}
+                    <span style={getRoleStyle(roleId)}>
+                        {getRoleIcon(roleId)} {userName}
                     </span>
-                    <FaSortDown style={{ marginLeft: "5px" }} />
                 </div>
 
                 {dropdownVisible && (
@@ -68,7 +110,6 @@ const styles = {
         justifyContent: "space-between",
         alignItems: "center",
         padding: "12px 25px",
-        // background: "linear-gradient(90deg, #185a9d ,#43cea2)",
         background: "linear-gradient(90deg,#185a9d, #7873f5, #71e59cff)",
         color: "white",
         boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
@@ -90,20 +131,11 @@ const styles = {
         display: "flex",
         alignItems: "center",
         cursor: "pointer",
-        background: "rgba(255,255,255,0.15)",
-        borderRadius: "30px",
-        padding: "6px 12px",
-        transition: "0.3s",
-    },
-    usernameContainerHover: {
-        background: "rgba(255,255,255,0.25)",
+        gap: "10px",
     },
     userIcon: {
-        marginRight: "8px",
-    },
-    username: {
-        fontSize: "16px",
-        fontWeight: "500",
+        marginRight: "4px",
+        color: "white",
     },
     icon: {
         cursor: "pointer",
@@ -111,7 +143,7 @@ const styles = {
     },
     dropdownMenu: {
         position: "absolute",
-        top: "45px",
+        top: "50px",
         right: 0,
         backgroundColor: "#fff",
         color: "#333",
@@ -128,9 +160,6 @@ const styles = {
         alignItems: "center",
         gap: "10px",
         transition: "0.2s",
-    },
-    dropdownItemHover: {
-        background: "#f5f5f5",
     },
 };
 

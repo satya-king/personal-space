@@ -21,7 +21,7 @@ const Layout = () => {
 
             {/* Sticky Footer */}
             <footer style={styles.footer}>
-                <p>© {new Date().getFullYear()} Satya. All Rights Reserved.</p>
+                <p>© {new Date().getFullYear()} All Rights Reserved to SATYA.</p>
             </footer>
         </div>
     );
@@ -55,10 +55,10 @@ const styles = {
         position: "sticky",
         bottom: 0,
         zIndex: 1000,
-        background: "#343a40",
+        background: "#495c6eff",
         color: "white",
         textAlign: "center",
-        padding: "12px",
+        padding: "0px",
         boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
     },
 };

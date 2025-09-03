@@ -51,7 +51,7 @@ const LoginPage = () => {
             });
 
             console.log("Login Response:", response);
-            
+
 
             // if (!response.status || response.status !== 200) {
             //     const errorText = await response.text();
@@ -65,6 +65,7 @@ const LoginPage = () => {
             localStorage.setItem("refreshToken", response.data.refreshToken);
             localStorage.setItem("isAuthenticated", "true");
             localStorage.setItem("userName", response.data.username);
+            localStorage.setItem("roleId", response.data.roleId);
 
             navigate("/home");
         } catch (error) {
