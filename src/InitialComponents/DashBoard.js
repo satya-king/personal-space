@@ -11,7 +11,7 @@ const Dashboard = () => {
                     Code, Debug, Deploy — Repeat! 🚀
                 </p>
                 <img
-                    src="/funnyDevGif3.gif"
+                    src="/walkingCodeGif.gif"
                     alt="Dev Coding"
                     style={styles.heroGif}
                 />
@@ -21,7 +21,7 @@ const Dashboard = () => {
             <section style={styles.cardsContainer}>
                 <div style={styles.card}>
                     <img
-                        src="https://media.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif"
+                        src="/funnyDevGif.gif"
                         alt="Coding fun"
                         style={styles.cardImage}
                     />
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
                 <div style={styles.card}>
                     <img
-                        src="https://media.giphy.com/media/coxQHKASG60HrHtvkt/giphy.gif"
+                        src="/funnyDevGif3.gif"
                         alt="Debugging"
                         style={styles.cardImage}
                     />
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
                 <div style={styles.card}>
                     <img
-                        src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif"
+                        src="/funnyDevGif2.gif"
                         alt="Deploy"
                         style={styles.cardImage}
                     />
@@ -64,7 +64,7 @@ const Dashboard = () => {
                 <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/f02mOEt11OQ"
+                    src="/Development Video.mp4"
                     title="Motivation for Developers"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
