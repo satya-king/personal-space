@@ -1,4 +1,4 @@
-import { GET_MASTER_ROLES, LOGOUT, PAYMENT_QR } from "./APIEndPoints";
+import { GET_MASTER_ROLES, LOGOUT, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -12,6 +12,12 @@ class CommonAPICallsService {
     }
     getMasterRoles() {
         return axiosInstance.get(GET_MASTER_ROLES);
+    }
+    saveNewRole(data) {
+        return axiosInstance.post(SAVE_MASTER_ROLE, data);
+    }
+    updateRole(roleId, data) {
+        return axiosInstance.put(UPDATE_MASTER_ROLE, data, { params: { roleId: roleId } });
     }
 }
 
