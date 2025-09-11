@@ -1,4 +1,4 @@
-import { GET_MASTER_ROLES, LOGOUT, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
+import { GET_AADHAR_OTP, GET_MASTER_ROLES, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -18,6 +18,14 @@ class CommonAPICallsService {
     }
     updateRole(roleId, data) {
         return axiosInstance.put(UPDATE_MASTER_ROLE, data, { params: { roleId: roleId } });
+    }
+
+
+    getAadharOtp(aadharNumber) {
+        return axiosInstance.get(GET_AADHAR_OTP, { params: { aadharNo: aadharNumber } });
+    }
+    validateAadharOtp(params) {
+        return axiosInstance.post(OTP_VALIDATION, params);
     }
 }
 

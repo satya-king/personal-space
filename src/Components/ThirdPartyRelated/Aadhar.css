@@ -76,3 +76,61 @@
   border: 1px solid #ddd;
   border-radius: 8px;
 }
+
+.aadhaar-display {
+  width: 400px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+.aadhaar-header {
+  text-align: center;
+  border-bottom: 2px solid #ff5722;
+  padding-bottom: 10px;
+}
+
+.aadhaar-logo {
+  width: 80px;
+  margin-bottom: 5px;
+}
+
+.aadhaar-body {
+  display: flex;
+  margin-top: 15px;
+}
+
+.aadhaar-left {
+  width: 30%;
+  text-align: center;
+}
+
+.aadhaar-photo {
+  width: 100px;
+  height: 120px;
+  border: 1px solid #ccc;
+}
+
+.aadhaar-right {
+  width: 70%;
+  padding-left: 15px;
+  font-size: 14px;
+}
+
+.aadhaar-right p {
+  margin: 5px 0;
+}
+
+.aadhaar-footer {
+  text-align: center;
+  border-top: 2px solid #ff5722;
+  margin-top: 15px;
+  padding-top: 10px;
+}
+
+.aadhaar-footer h2 {
+  letter-spacing: 2px;
+}

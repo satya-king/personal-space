@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { showNotification } from "../../utils/CommonFunctions";
-import { GET_AADHAR_OTP, OTP_VALIDATION } from "../../APIURLs/Urls";
-import axiosInstance from "../../utils/axiosInstance";
 import { useFormik } from "formik";
-import "./Aadhar.css"; // ✅ custom CSS
+import "./Aadhar.css";
+import CommonAPICallsService from "../../utils/CommonAPICallsService";
 
 function Aadhar() {
     const [aadharAuth, setAadharAuth] = useState(false);
@@ -21,25 +20,22 @@ function Aadhar() {
             relation: "",
         },
         onSubmit: () => {
-            submitOtptDetails(formik, setAadharDetails, setAadharAuth);
+            submitOtpDetails(formik, setAadharDetails, setAadharAuth);
         },
     });
 
-    const getOtpData = () => {
+    const getOtpData = async () => {
         if (formik.values.aadhar !== "" && formik.values.aadhar.length === 12) {
-            axiosInstance
-                .get(`${GET_AADHAR_OTP}${formik.values.aadhar}`)
+            CommonAPICallsService.getAadharOtp(formik.values.aadhar)
                 .then((res) => {
                     if (res && res.data?.SCODE === "01") {
                         formik.setFieldValue("trnxNo", res.data?.SDESC);
-                        Swal.fire({
-                            text: "OTP Sent Successfully",
-                            icon: "success",
-                        });
+                        Swal.fire({ text: "OTP Sent Successfully", icon: "success" });
                     } else {
                         showNotification("warning", "Failed to send OTP, please try again");
                     }
-                })
+                }
+                )
                 .catch(() => {
                     showNotification("error", "Something went wrong. Try again later.");
                 });
@@ -48,12 +44,12 @@ function Aadhar() {
         }
     };
 
-    const submitOtptDetails = (formik, setAadharDetails, setAadharAuth) => {
+    const submitOtpDetails = (formik, setAadharDetails, setAadharAuth) => {
         if (formik.values.aadhar !== "" && formik.values.aadharOtp !== "") {
             const params = {
-                aadharno: formik.values?.aadhar,
+                uid: formik.values?.aadhar,
                 otp: formik.values.aadharOtp,
-                txnNo: formik.values?.trnxNo,
+                trn: formik.values?.trnxNo,
             };
 
             Swal.fire({
@@ -65,36 +61,29 @@ function Aadhar() {
                 confirmButtonText: "Yes",
             }).then((result) => {
                 if (result.isConfirmed === true) {
-                    axiosInstance
-                        .post(OTP_VALIDATION, params)
+                    CommonAPICallsService.validateAadharOtp(params)
                         .then((res) => {
                             if (res && res.data?.SCODE === "01") {
-                                showNotification("success", "Authenticated Successfully !",).ten(
-                                    function () {
-                                        setAadharAuth(true);
+                                showNotification("success", "Authenticated Successfully !");
+                                setAadharAuth(true);
 
-                                        let gender = "TRANSGENDER";
-                                        if (res.data?.SDESC?.gender === "M") {
-                                            gender = "MALE";
-                                        } else if (res.data?.SDESC?.gender === "F") {
-                                            gender = "FEMALE";
-                                        }
+                                let gender = "TRANSGENDER";
+                                if (res.data?.SDESC?.gender === "M") gender = "MALE";
+                                else if (res.data?.SDESC?.gender === "F") gender = "FEMALE";
 
-                                        setAadharDetails(res.data?.SDESC);
-                                        localStorage.setItem("uid", res.data?.SDESC.uid);
+                                setAadharDetails(res.data?.SDESC);
+                                localStorage.setItem("uid", res.data?.SDESC.uid);
 
-                                        formik.setFieldValue("fullname", res.data?.SDESC.name);
-                                        formik.setFieldValue(
-                                            "dob",
-                                            ((res.data?.SDESC?.dob) ?? "")
-                                                .split("-")
-                                                .reverse()
-                                                .join("/")
-                                        );
-                                        formik.setFieldValue("gender", gender);
-                                        formik.setFieldValue("relation", res.data?.SDESC?.co);
-                                    }
+                                formik.setFieldValue("fullname", res.data?.SDESC.name);
+                                formik.setFieldValue(
+                                    "dob",
+                                    (res.data?.SDESC?.dob ?? "")
+                                        .split("-")
+                                        .reverse()
+                                        .join("/")
                                 );
+                                formik.setFieldValue("gender", gender);
+                                formik.setFieldValue("relation", res.data?.SDESC?.co);
                             } else if (res.data?.SCODE === "02") {
                                 showNotification("error", "Invalid OTP, Please try again.");
                                 setAadharAuth(false);
@@ -150,12 +139,36 @@ function Aadhar() {
                 </form>
 
                 {aadharAuth && aadharDetails && (
-                    <div className="aadhar-details">
-                        <h3>Aadhaar Details</h3>
-                        <p><strong>Name:</strong> {formik.values.fullname}</p>
-                        <p><strong>DOB:</strong> {formik.values.dob}</p>
-                        <p><strong>Gender:</strong> {formik.values.gender}</p>
-                        <p><strong>Relation:</strong> {formik.values.relation}</p>
+                    <div className="aadhaar-display">
+                        <div className="aadhaar-header">
+                            <img
+                                src="/Aadhaar_Logo.png"
+                                alt="Aadhaar Logo"
+                                className="aadhaar-logo"
+                            />
+                            <h3>भारत सरकार / Government of India</h3>
+                        </div>
+
+                        <div className="aadhaar-body">
+                            <div className="aadhaar-left">
+                                <img
+                                    src={`data:image/jpeg;base64,${aadharDetails.pht}`}
+                                    alt="Aadhaar Profile"
+                                    className="aadhaar-photo"
+                                />
+                            </div>
+                            <div className="aadhaar-right">
+                                <p><strong>Name:</strong> {aadharDetails.name}</p>
+                                <p><strong>DOB:</strong> {aadharDetails.dob}</p>
+                                <p><strong>Gender:</strong> {formik.values.gender}</p>
+                                <p><strong>Address:</strong> {aadharDetails.house}, {aadharDetails.street}, {aadharDetails.loc}, {aadharDetails.vtc}, {aadharDetails.dist}, {aadharDetails.state} - {aadharDetails.pc}</p>
+                            </div>
+                        </div>
+
+                        <div className="aadhaar-footer">
+                            <h2>{aadharDetails.uid.replace(/(.{4})/g, "$1 ")}</h2>
+                            <p>आधार - आम आदमी का अधिकार</p>
+                        </div>
                     </div>
                 )}
             </div>
