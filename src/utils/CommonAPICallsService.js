@@ -1,4 +1,4 @@
-import { GET_AADHAR_OTP, GET_MASTER_ROLES, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
+import { GET_AADHAR_OTP, GET_MASTER_ROLES, GET_SAMPLE_ONE, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -27,6 +27,12 @@ class CommonAPICallsService {
     validateAadharOtp(params) {
         return axiosInstance.post(OTP_VALIDATION, params);
     }
+
+
+    getSampleOne() {
+        return axiosInstance.get(GET_SAMPLE_ONE);
+    }
+
 }
 
 export default new CommonAPICallsService();
