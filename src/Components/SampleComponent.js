@@ -9,13 +9,14 @@ function SampleComponent() {
     const [limit, setLimit] = useState(0);
     const [remaining, setRemaining] = useState(0);
     const [visualRemaining, setVisualRemaining] = useState(0);
-    const [refillDuration, setRefillDuration] = useState(300); // seconds from backend Retry-After or default
+    const [refillDuration, setRefillDuration] = useState(300); // default in seconds
 
+    // Initial fetch
     useEffect(() => {
         handleSampleGet();
     }, []);
 
-    // Countdown for retryAfter
+    // Retry countdown
     useEffect(() => {
         if (retryAfter > 0) {
             const interval = setInterval(() => {
@@ -25,9 +26,9 @@ function SampleComponent() {
         }
     }, [retryAfter]);
 
-    // Smooth refill animation for quota
+    // Smooth quota refill animation
     useEffect(() => {
-        if (remaining === 0 && limit > 0) {
+        if (retryAfter === 0 && remaining === 0 && limit > 0) {
             setVisualRemaining(0);
             const durationPerStep = (refillDuration * 1000) / limit;
             let step = 1;
@@ -35,6 +36,7 @@ function SampleComponent() {
                 setVisualRemaining(prev => {
                     if (prev >= limit) {
                         clearInterval(interval);
+                        setRemaining(limit); // now user can use API
                         return limit;
                     }
                     return step++;
@@ -42,7 +44,7 @@ function SampleComponent() {
             }, durationPerStep);
             return () => clearInterval(interval);
         }
-    }, [remaining, limit, refillDuration]);
+    }, [retryAfter, remaining, limit, refillDuration]);
 
     const handleSampleGet = async () => {
         try {
@@ -51,12 +53,13 @@ function SampleComponent() {
             setErrorMsg("");
             setRetryAfter(0);
 
-            // Read quota headers
+            // Read headers
             const limitVal = parseInt(response.headers["x-rate-limit-limit"] || "0");
             const remainingVal = parseInt(response.headers["x-rate-limit-remaining"] || "0");
             setLimit(limitVal);
             setRemaining(remainingVal);
             setVisualRemaining(remainingVal);
+
         } catch (error) {
             console.log("API Error:", error.response);
             if (error.response && error.response.status === 429) {
@@ -66,7 +69,7 @@ function SampleComponent() {
                 setLimit(parseInt(error.response.headers["x-rate-limit-limit"] || "0"));
                 setRemaining(0);
                 setVisualRemaining(0);
-                setRefillDuration(retry); // use backend provided retry duration
+                setRefillDuration(retry);
             } else {
                 setErrorMsg("⚠️ Something went wrong. Please try again later.");
             }
@@ -99,7 +102,7 @@ function SampleComponent() {
                 <DataTable title="Users" columns={columns} data={message} />
             )}
 
-            {/* Quota Meter Section */}
+            {/* Quota Meter */}
             {limit > 0 && (
                 <div style={{
                     border: "1px solid #e0e0e0",
@@ -152,7 +155,7 @@ function SampleComponent() {
                 </div>
             )}
 
-            {/* Error / Retry Block */}
+            {/* Retry / Error */}
             {(retryAfter > 0 || errorMsg) && (
                 <div style={{
                     background: retryAfter > 0 ? "#fff5f5" : "#e6ffed",
@@ -182,21 +185,21 @@ function SampleComponent() {
                 </div>
             )}
 
+            {/* Fetch Button */}
             <button
                 onClick={handleSampleGet}
+                // disabled={remaining === 0 || retryAfter > 0}
                 style={{
                     padding: "12px 24px",
                     border: "none",
                     borderRadius: "6px",
-                    backgroundColor: remaining > 0 ? "#007bff" : "#999",
+                    backgroundColor: (remaining === 0 || retryAfter > 0) ? "#999" : "#007bff",
                     color: "white",
                     cursor: "pointer",
                     fontSize: "16px",
                     fontWeight: "500",
                     transition: "background 0.2s"
                 }}
-                onMouseOver={e => remaining > 0 && (e.currentTarget.style.backgroundColor = "#0056b3")}
-                onMouseOut={e => remaining > 0 && (e.currentTarget.style.backgroundColor = "#007bff")}
             >
                 🔄 Fetch Again
             </button>
