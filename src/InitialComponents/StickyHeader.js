@@ -4,44 +4,7 @@ import { FaHome, FaChevronLeft, FaSortDown } from "react-icons/fa";
 import { IoMdLogOut } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
-
-// role-based style mapping
-const getRoleStyle = (roleId) => {
-    const base = {
-        padding: "4px 10px",
-        borderRadius: "20px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "6px",
-        fontSize: "16px",
-        fontWeight: "500",
-        transition: "0.3s",
-    };
-
-    switch (roleId) {
-        case 99: // GOD USER
-            return { ...base, background: "#ffe6e6", color: "red", fontWeight: "bold" };
-        case 1: // ADMIN USER
-            return { ...base, background: "#e6ffe6", color: "green" };
-        case 3: // PREMIUM USER
-            return { ...base, background: "#fff8dc", color: "gold", fontWeight: "bold" };
-        case 4: // POWER USER
-            return { ...base, background: "#fff0e0", color: "orange" };
-        default: // Normal User
-            return { ...base, background: "rgba(255,255,255,0.15)", color: "#fff" };
-    }
-};
-
-// role-based icon mapping
-const getRoleIcon = (roleId) => {
-    switch (roleId) {
-        case 99: return "👑"; // GOD USER
-        case 1: return "🛡️"; // ADMIN USER
-        case 3: return "⭐"; // PREMIUM USER
-        case 4: return "⚡"; // POWER USER
-        default: return "👤"; // Normal User
-    }
-};
+import { getRoleIcon, getRoleStyle } from "../utils/CommonFunctions";
 
 const StickerHeader = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);

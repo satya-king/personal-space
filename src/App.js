@@ -11,6 +11,7 @@ import SampleComponent from "./Components/SampleComponent";
 import PaymentByScanning from "./Components/Payments/PaymentByScanning";
 import AadharOTPValidation from "./Components/ThirdPartyRelated/AadharOTPValidation";
 import RolesMaster from "./Components/AdminItems/RolesMaster";
+import FakeDashboard from "./InitialComponents/FakeDashboard";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route path="/home" element={<Dashboard />} />
+              <Route path="/home" element={<FakeDashboard />} />
               <Route path="/toDoList" element={<ToDoList />} />
               <Route path="/PaymentPage" element={<PaymentPage />} />
               <Route path="/PaymentByScanning" element={<PaymentByScanning />} />

@@ -88,14 +88,24 @@ function DataTable({ title, columns, data }) {
                         <thead>
                             <tr>
                                 {columns.map((col) => (
-                                    <th key={col.key} onClick={() => handleSort(col.key)} style={{ borderLeft: "1px solid #4800ffff" }}>
-                                        <div className="th-content" >
+                                    <th
+                                        key={col.key}
+                                        onClick={() => handleSort(col.key)}
+                                        style={{
+                                            borderLeft: "1px solid #4800ffff",
+                                            width: col.width || "auto", // 👈 apply dynamic width
+                                        }}
+                                    >
+                                        <div className="th-content">
                                             {col.label}
                                             {sortConfig.key === col.key &&
                                                 (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
                                             <span
-                                                className="resize-handle" style={{ borderLeft: "5px solid #ab9f9fff" }}
-                                                onMouseDown={(e) => handleMouseDown(e, e.target.parentElement.parentElement)}
+                                                className="resize-handle"
+                                                style={{ borderLeft: "5px solid #ab9f9fff" }}
+                                                onMouseDown={(e) =>
+                                                    handleMouseDown(e, e.target.parentElement.parentElement)
+                                                }
                                             />
                                         </div>
                                     </th>
@@ -107,7 +117,10 @@ function DataTable({ title, columns, data }) {
                                 filteredData.map((row, i) => (
                                     <tr key={i}>
                                         {columns.map((col) => (
-                                            <td key={col.key}>
+                                            <td
+                                                key={col.key}
+                                                style={{ width: col.width || "auto" }} // 👈 also apply to td
+                                            >
                                                 {col.render ? col.render(row[col.key], row) : row[col.key]}
                                             </td>
                                         ))}
@@ -121,6 +134,7 @@ function DataTable({ title, columns, data }) {
                                 </tr>
                             )}
                         </tbody>
+
                     </table>
                 </div>
             )}

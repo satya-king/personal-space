@@ -36,3 +36,42 @@ export const getTokenFromLocalStorage = async () => {
         return token
     }
 }
+
+
+export const getRoleStyle = (roleId) => {
+    const baseStyle = {
+        display: "inline-block",
+        padding: "4px 8px",
+        borderRadius: "6px",
+        transition: "all 0.2s ease-in-out",
+        cursor: "pointer"
+    };
+
+    switch (roleId) {
+        case 99:
+            return { ...baseStyle, backgroundColor: "#ffe6e6", color: "red", fontWeight: "bold" };
+        case 1:
+            return { ...baseStyle, backgroundColor: "#e6ffe6", color: "green" };
+        case 3:
+            return { ...baseStyle, backgroundColor: "#fff8dc", color: "gold" };
+        case 4:
+            return { ...baseStyle, backgroundColor: "#fff0e0", color: "orange" };
+        default:
+            return { ...baseStyle, backgroundColor: "#f0f0f0", color: "#333" };
+    }
+};
+
+export const getRoleIcon = (roleId) => {
+    switch (roleId) {
+        case 99:
+            return "👑";
+        case 1:
+            return "🛡️";
+        case 3:
+            return "⭐";
+        case 4:
+            return "⚡";
+        default:
+            return "👤";
+    }
+};
