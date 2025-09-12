@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CommonAPICallsService from '../utils/CommonAPICallsService';
+import DataTable from '../utils/DataTable';
 
 function SampleComponent() {
-    const [sample, setSample] = useState("")
+    const [message, setMessage] = useState([])
     const [errorMsg, setErrorMsg] = useState("")
     const [retryAfter, setRetryAfter] = useState(0)
     const [limit, setLimit] = useState(0)
     const [remaining, setRemaining] = useState(0)
-    const [funFact, setFunFact] = useState("")
-
-    const funFacts = [
-        "🔐 Rate limiting prevents brute-force attacks.",
-        "⚖️ It ensures fair usage for everyone, like queues at an amusement park.",
-        "🚦 Think of it as a traffic light – too many cars at once cause jams.",
-        "🌍 Big APIs like Twitter, GitHub, and Google also enforce rate limits.",
-        "⚡ Without rate limits, servers could crash from overload!"
-    ]
 
     useEffect(() => {
         handleSampleGet()
@@ -35,19 +27,21 @@ function SampleComponent() {
         try {
             const response = await CommonAPICallsService.getSampleOne();
 
-            setSample(response?.data)
+            setMessage(response?.data || [])
+
             setErrorMsg("")
             setRetryAfter(0)
 
-            // read headers
+            // Read headers for quota
             setLimit(parseInt(response.headers["x-rate-limit-limit"] || "0"))
             setRemaining(parseInt(response.headers["x-rate-limit-remaining"] || "0"))
         } catch (error) {
+            console.log("API Error:", error.response);
+
             if (error.response && error.response.status === 429) {
                 const retry = parseInt(error.response.headers['retry-after'] || "30", 10)
                 setRetryAfter(retry)
                 setErrorMsg("⏳ You’ve hit our rate limit! Please wait before retrying.")
-                setFunFact(funFacts[Math.floor(Math.random() * funFacts.length)])
                 setLimit(parseInt(error.response.headers["x-rate-limit-limit"] || "0"))
                 setRemaining(parseInt(error.response.headers["x-rate-limit-remaining"] || "0"))
             } else {
@@ -58,17 +52,51 @@ function SampleComponent() {
 
     const percentage = limit > 0 ? Math.round((remaining / limit) * 100) : 0
 
+
+
+    const columns = [
+        {
+            key: "id",
+            label: "Sl.No",
+            width: "5%",
+            render: (value) => value,
+        },
+        {
+            key: "email",
+            label: "Email ID",
+            width: "10%",
+            render: (value) => value,
+        },
+        {
+            key: "username",
+            label: "User Name",
+            width: "30%",
+            render: (value) => value,
+        },
+        {
+            key: "createdAt",
+            label: "Created On",
+            width: "20%",
+            render: (value) => (value ? new Date(value).toLocaleString() : "-"),
+        }
+    ];
+
+
     return (
         <div style={{
-            width: "550px",
+            width: "auto",
             background: "#fff",
             borderRadius: "14px",
             boxShadow: "0 6px 16px rgba(0,0,0,0.1)",
             padding: "25px",
             textAlign: "center"
         }}>
-            <h2 style={{ marginBottom: "12px", color: "#222" }}>🚀 Sample API Rate limiting</h2>
-            {sample && <p style={{ fontSize: "16px", marginBottom: "20px", color: "#444" }}>{sample}</p>}
+            <h2 style={{ marginBottom: "12px", color: "#222" }}>🚀 Sample API Rate Limiting</h2>
+
+            {
+                message?.length === 0 ? <p style={{ color: "#555" }}>No data available. Click "Fetch Again" to load.</p> :
+                    <DataTable title="Users" columns={columns} data={message} />
+            }
 
             {/* Quota Meter Section */}
             {limit > 0 && (
@@ -84,23 +112,12 @@ function SampleComponent() {
                     {/* Circular Gauge */}
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: "15px" }}>
                         <svg width="120" height="120">
+                            <circle cx="60" cy="60" r="50" stroke="#eee" strokeWidth="12" fill="none" />
                             <circle
                                 cx="60"
                                 cy="60"
                                 r="50"
-                                stroke="#eee"
-                                strokeWidth="12"
-                                fill="none"
-                            />
-                            <circle
-                                cx="60"
-                                cy="60"
-                                r="50"
-                                stroke={
-                                    percentage > 50 ? "#4caf50"
-                                        : percentage > 20 ? "#ff9800"
-                                            : "#f44336"
-                                }
+                                stroke={percentage > 50 ? "#4caf50" : percentage > 20 ? "#ff9800" : "#f44336"}
                                 strokeWidth="12"
                                 fill="none"
                                 strokeDasharray={2 * Math.PI * 50}
@@ -108,15 +125,7 @@ function SampleComponent() {
                                 strokeLinecap="round"
                                 style={{ transition: "stroke-dashoffset 0.5s ease-in-out" }}
                             />
-                            <text
-                                x="50%"
-                                y="50%"
-                                textAnchor="middle"
-                                dy=".3em"
-                                fontSize="18"
-                                fontWeight="bold"
-                                fill="#333"
-                            >
+                            <text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="18" fontWeight="bold" fill="#333">
                                 {remaining}/{limit}
                             </text>
                         </svg>
@@ -168,11 +177,6 @@ function SampleComponent() {
                         }}>
                             ⏱ Retry available in {retryAfter}s
                         </span>
-                    )}
-                    {funFact && (
-                        <p style={{ marginTop: "10px", fontStyle: "italic", color: "#555" }}>
-                            💡 {funFact}
-                        </p>
                     )}
                 </div>
             )}
