@@ -1,86 +1,86 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import CommonAPICallsService from '../utils/CommonAPICallsService';
 import DataTable from '../utils/DataTable';
 
 function SampleComponent() {
-    const [message, setMessage] = useState([])
-    const [errorMsg, setErrorMsg] = useState("")
-    const [retryAfter, setRetryAfter] = useState(0)
-    const [limit, setLimit] = useState(0)
-    const [remaining, setRemaining] = useState(0)
+    const [message, setMessage] = useState([]);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [retryAfter, setRetryAfter] = useState(0);
+    const [limit, setLimit] = useState(0);
+    const [remaining, setRemaining] = useState(0);
+    const [visualRemaining, setVisualRemaining] = useState(0);
+    const [refillDuration, setRefillDuration] = useState(300); // seconds from backend Retry-After or default
 
     useEffect(() => {
-        handleSampleGet()
-    }, [])
+        handleSampleGet();
+    }, []);
 
-    // Countdown effect for retryAfter
+    // Countdown for retryAfter
     useEffect(() => {
         if (retryAfter > 0) {
             const interval = setInterval(() => {
-                setRetryAfter(prev => (prev > 0 ? prev - 1 : 0))
-            }, 1000)
-            return () => clearInterval(interval)
+                setRetryAfter(prev => (prev > 0 ? prev - 1 : 0));
+            }, 1000);
+            return () => clearInterval(interval);
         }
-    }, [retryAfter])
+    }, [retryAfter]);
+
+    // Smooth refill animation for quota
+    useEffect(() => {
+        if (remaining === 0 && limit > 0) {
+            setVisualRemaining(0);
+            const durationPerStep = (refillDuration * 1000) / limit;
+            let step = 1;
+            const interval = setInterval(() => {
+                setVisualRemaining(prev => {
+                    if (prev >= limit) {
+                        clearInterval(interval);
+                        return limit;
+                    }
+                    return step++;
+                });
+            }, durationPerStep);
+            return () => clearInterval(interval);
+        }
+    }, [remaining, limit, refillDuration]);
 
     const handleSampleGet = async () => {
         try {
             const response = await CommonAPICallsService.getSampleOne();
+            setMessage(response?.data || []);
+            setErrorMsg("");
+            setRetryAfter(0);
 
-            setMessage(response?.data || [])
-
-            setErrorMsg("")
-            setRetryAfter(0)
-
-            // Read headers for quota
-            setLimit(parseInt(response.headers["x-rate-limit-limit"] || "0"))
-            setRemaining(parseInt(response.headers["x-rate-limit-remaining"] || "0"))
+            // Read quota headers
+            const limitVal = parseInt(response.headers["x-rate-limit-limit"] || "0");
+            const remainingVal = parseInt(response.headers["x-rate-limit-remaining"] || "0");
+            setLimit(limitVal);
+            setRemaining(remainingVal);
+            setVisualRemaining(remainingVal);
         } catch (error) {
             console.log("API Error:", error.response);
-
             if (error.response && error.response.status === 429) {
-                const retry = parseInt(error.response.headers['retry-after'] || "30", 10)
-                setRetryAfter(retry)
-                setErrorMsg("⏳ You’ve hit our rate limit! Please wait before retrying.")
-                setLimit(parseInt(error.response.headers["x-rate-limit-limit"] || "0"))
-                setRemaining(parseInt(error.response.headers["x-rate-limit-remaining"] || "0"))
+                const retry = parseInt(error.response.headers['retry-after'] || "30", 10);
+                setRetryAfter(retry);
+                setErrorMsg("⏳ You’ve hit our rate limit! Please wait before retrying.");
+                setLimit(parseInt(error.response.headers["x-rate-limit-limit"] || "0"));
+                setRemaining(0);
+                setVisualRemaining(0);
+                setRefillDuration(retry); // use backend provided retry duration
             } else {
-                setErrorMsg("⚠️ Something went wrong. Please try again later.")
+                setErrorMsg("⚠️ Something went wrong. Please try again later.");
             }
         }
     };
 
-    const percentage = limit > 0 ? Math.round((remaining / limit) * 100) : 0
-
-
+    const percentage = limit > 0 ? Math.round((visualRemaining / limit) * 100) : 0;
 
     const columns = [
-        {
-            key: "id",
-            label: "Sl.No",
-            width: "5%",
-            render: (value) => value,
-        },
-        {
-            key: "email",
-            label: "Email ID",
-            width: "10%",
-            render: (value) => value,
-        },
-        {
-            key: "username",
-            label: "User Name",
-            width: "30%",
-            render: (value) => value,
-        },
-        {
-            key: "createdAt",
-            label: "Created On",
-            width: "20%",
-            render: (value) => (value ? new Date(value).toLocaleString() : "-"),
-        }
+        { key: "id", label: "Sl.No", width: "5%", render: value => value },
+        { key: "email", label: "Email ID", width: "10%", render: value => value },
+        { key: "username", label: "User Name", width: "30%", render: value => value },
+        { key: "createdAt", label: "Created On", width: "20%", render: value => (value ? new Date(value).toLocaleString() : "-") },
     ];
-
 
     return (
         <div style={{
@@ -93,10 +93,11 @@ function SampleComponent() {
         }}>
             <h2 style={{ marginBottom: "12px", color: "#222" }}>🚀 Sample API Rate Limiting</h2>
 
-            {
-                message?.length === 0 ? <p style={{ color: "#555" }}>No data available. Click "Fetch Again" to load.</p> :
-                    <DataTable title="Users" columns={columns} data={message} />
-            }
+            {message?.length === 0 ? (
+                <p style={{ color: "#555" }}>No data available. Click "Fetch Again" to load.</p>
+            ) : (
+                <DataTable title="Users" columns={columns} data={message} />
+            )}
 
             {/* Quota Meter Section */}
             {limit > 0 && (
@@ -108,8 +109,6 @@ function SampleComponent() {
                     background: "#fafafa"
                 }}>
                     <h4 style={{ marginBottom: "8px", color: "#333" }}>📊 API Quota</h4>
-
-                    {/* Circular Gauge */}
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: "15px" }}>
                         <svg width="120" height="120">
                             <circle cx="60" cy="60" r="50" stroke="#eee" strokeWidth="12" fill="none" />
@@ -126,14 +125,12 @@ function SampleComponent() {
                                 style={{ transition: "stroke-dashoffset 0.5s ease-in-out" }}
                             />
                             <text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="18" fontWeight="bold" fill="#333">
-                                {remaining}/{limit}
+                                {visualRemaining}/{limit}
                             </text>
                         </svg>
                     </div>
-
-                    {/* Progress Bar */}
                     <p style={{ margin: "5px 0", fontWeight: "500", color: "#555" }}>
-                        You have <b>{remaining}</b> / <b>{limit}</b> requests left
+                        You have <b>{visualRemaining}</b> / <b>{limit}</b> requests left
                     </p>
                     <div style={{
                         width: "100%",
@@ -156,15 +153,19 @@ function SampleComponent() {
             )}
 
             {/* Error / Retry Block */}
-            {errorMsg && (
+            {(retryAfter > 0 || errorMsg) && (
                 <div style={{
-                    background: "#fff5f5",
-                    border: "1px solid #f5c2c2",
+                    background: retryAfter > 0 ? "#fff5f5" : "#e6ffed",
+                    border: retryAfter > 0 ? "1px solid #f5c2c2" : "1px solid #a6f4c5",
                     borderRadius: "10px",
                     padding: "15px",
                     marginBottom: "20px"
                 }}>
-                    <p style={{ margin: "5px 0", fontWeight: "bold", color: "#d32f2f" }}>{errorMsg}</p>
+                    <p style={{ margin: "5px 0", fontWeight: "bold", color: retryAfter > 0 ? "#d32f2f" : "rgba(16, 197, 0, 1)" }}>
+                        {retryAfter > 0
+                            ? "⏳ You’ve hit our rate limit! Please wait before retrying."
+                            : "✅ You can now retry fetching data!"}
+                    </p>
                     {retryAfter > 0 && (
                         <span style={{
                             display: "inline-block",
@@ -187,20 +188,20 @@ function SampleComponent() {
                     padding: "12px 24px",
                     border: "none",
                     borderRadius: "6px",
-                    backgroundColor: "#007bff",
+                    backgroundColor: remaining > 0 ? "#007bff" : "#999",
                     color: "white",
                     cursor: "pointer",
                     fontSize: "16px",
                     fontWeight: "500",
                     transition: "background 0.2s"
                 }}
-                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
-                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                onMouseOver={e => remaining > 0 && (e.currentTarget.style.backgroundColor = "#0056b3")}
+                onMouseOut={e => remaining > 0 && (e.currentTarget.style.backgroundColor = "#007bff")}
             >
                 🔄 Fetch Again
             </button>
         </div>
-    )
+    );
 }
 
-export default SampleComponent
+export default SampleComponent;
