@@ -8,6 +8,7 @@ const SampleComponent = React.lazy(() => import("../Components/SampleComponent")
 const AadharOTPValidation = React.lazy(() => import("../Components/ThirdPartyRelated/AadharOTPValidation"));
 const RolesMaster = React.lazy(() => import("../Components/AdminItems/RolesMaster"));
 const ServiceMaster = React.lazy(() => import("../Components/AdminItems/ServiceMaster"));
+const RoleServiceMapping = React.lazy(() => import("../Components/AdminItems/RoleServiceMapping"));
 const SampleWebFlux = React.lazy(() => import("../Components/SampleWebFlux"));
 
 const routes = [
@@ -50,6 +51,12 @@ const routes = [
     {
         path: "/ServiceMaster",
         element: <ServiceMaster />,
+        private: true,
+        role: "ADMIN", // optional role restriction
+    },
+    {
+        path: "/RoleServiceMapping",
+        element: <RoleServiceMapping />,
         private: true,
         role: "ADMIN", // optional role restriction
     },
