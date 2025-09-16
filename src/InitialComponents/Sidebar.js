@@ -8,7 +8,7 @@ const menuData = [
         title: "Home",
         subItems: [
             { id: "toDoList", title: "To-Do List", path: "/toDoList" },
-            { id: "homeSub2", title: "Sub Item 2", path: "#" },
+            { id: "homeSub2", title: "Rate Limit", path: "/rateLimiterSample" },
             { id: "homeSub3", title: "Sub Item 3", path: "#" },
             { id: "homeSub4", title: "Sub Item 4", path: "#" }
         ]

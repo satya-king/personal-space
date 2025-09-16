@@ -31,7 +31,7 @@ const routes = [
         private: true,
     },
     {
-        path: "/SampleComponent",
+        path: "/rateLimiterSample",
         element: <SampleComponent />,
         private: true,
     },
