@@ -4,6 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import "./payment.css";
 import { API_URL } from "../../APIURLs/Urls";
+import axiosInstance from "../../utils/axiosInstance";
 
 
 function PaymentPage() {
@@ -18,7 +19,7 @@ function PaymentPage() {
     const handlePayNow = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 `${API_URL}/razorpay/create-payment-link?amount=100&description=TestPayment&name=Satya&email=test@example.com&contact=9876543210`
             );
             setPaymentLink(response.data);

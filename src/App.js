@@ -12,6 +12,7 @@ import PaymentByScanning from "./Components/Payments/PaymentByScanning";
 import AadharOTPValidation from "./Components/ThirdPartyRelated/AadharOTPValidation";
 import RolesMaster from "./Components/AdminItems/RolesMaster";
 import FakeDashboard from "./InitialComponents/FakeDashboard";
+import SampleWebFlux from "./Components/SampleWebFlux";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ function App() {
 
 
               <Route path="/RolesMaster" element={<RolesMaster />} />
+              <Route path="/SampleWebFlux" element={<SampleWebFlux />} />
 
 
 
