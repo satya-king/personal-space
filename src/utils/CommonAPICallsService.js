@@ -1,4 +1,4 @@
-import { GET_AADHAR_OTP, GET_ALL_SERVICES, GET_MASTER_ROLES, GET_MASTER_SERVICES, GET_SAMPLE_ONE, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, SAVE_NEW_SERVICE, UPDATE_MASTER_ROLE, UPDATE_NEW_SERVICE } from "./APIEndPoints";
+import { DELETE_MAPPING, GET_AADHAR_OTP, GET_ALL_SERVICES, GET_MAPPED_SERVICES, GET_MASTER_ROLES, GET_MASTER_SERVICES, GET_SAMPLE_ONE, GET_UNMAPPED_SERVICES, LOGOUT, MAP_SERVICES, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, SAVE_NEW_SERVICE, UPDATE_MASTER_ROLE, UPDATE_NEW_SERVICE } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -21,6 +21,23 @@ class CommonAPICallsService {
     updateRole(roleId, data) {
         return axiosInstance.put(UPDATE_MASTER_ROLE, data, { params: { roleId: roleId } });
     }
+
+    getServicesByRole(roleId) {
+        return axiosInstance.get(GET_MAPPED_SERVICES(roleId));
+    }
+
+    getUnmappedServices(roleId) {
+        return axiosInstance.get(GET_UNMAPPED_SERVICES(roleId));
+    }
+
+    mapServicesToRole(roleId, serviceIds) {
+        return axiosInstance.post(MAP_SERVICES(roleId), { serviceIds });
+    }
+
+    deleteRoleServiceMapping(roleId, serviceId) {
+        return axiosInstance.delete(DELETE_MAPPING(roleId, serviceId));
+    }
+
 
     getAllServices() {
         return axiosInstance.get(GET_ALL_SERVICES);

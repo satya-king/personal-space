@@ -13,6 +13,18 @@ export const GET_ALL_SERVICES = API_URL + "/admin/get-all-services";
 export const SAVE_NEW_SERVICE = API_URL + "/admin/save-new-service";
 export const UPDATE_NEW_SERVICE = API_URL + "/admin/update-service";
 
+// export const GET_MAPPED_SERVICES = API_URL + "/admin/get-services-by-role";
+// export const GET_UNMAPPED_SERVICES = API_URL + "/admin/get-unmapped-services";
+// export const MAP_SERVICES = API_URL + "/admin/map-role-services";
+// export const DELETE_MAPPING = API_URL + "/admin/delete-role-service";
+
+// Role ↔ Service mapping
+export const GET_MAPPED_SERVICES = (roleId) => `${API_URL}/admin/${roleId}/services`;
+export const GET_UNMAPPED_SERVICES = (roleId) => `${API_URL}/admin/${roleId}/unmapped-services`;
+export const MAP_SERVICES = (roleId) => `${API_URL}/admin/${roleId}/map`;
+export const DELETE_MAPPING = (roleId, serviceId) => `${API_URL}/admin/${roleId}/services/${serviceId}`;
+
+
 export const GET_MASTER_SERVICES = API_URL + "/admin/get-enabled-services";
 
 
