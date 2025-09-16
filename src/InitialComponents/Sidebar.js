@@ -56,20 +56,25 @@ const Sidebar = () => {
     const [menuData, setMenuData] = useState(localStorage.getItem("menuData"));
 
     useEffect(() => {
-        fetchMenus();
+        const storedMenus = localStorage.getItem("menuData");
+
+        if (storedMenus) {
+            setMenuData(JSON.parse(storedMenus));
+        } else {
+            fetchMenus();
+        }
     }, []);
 
     const fetchMenus = async () => {
-        const storedMenus = await CommonAPICallsService.getRoleServices();
-        if (storedMenus === null) {
-            console.warn("No menu data found in localStorage under 'roleBasedMenus'");
-        }
-        if (storedMenus) {
-            setMenuData(storedMenus?.data);
+        const response = await CommonAPICallsService.getRoleServices();
+        if (response?.data) {
+            setMenuData(response.data);
+            localStorage.setItem("menuData", JSON.stringify(response.data));
         } else {
             setMenuData([]);
         }
     };
+
 
 
     // const toggleMenu = (menuId) => {
