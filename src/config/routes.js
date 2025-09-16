@@ -7,6 +7,7 @@ const PaymentByScanning = React.lazy(() => import("../Components/Payments/Paymen
 const SampleComponent = React.lazy(() => import("../Components/SampleComponent"));
 const AadharOTPValidation = React.lazy(() => import("../Components/ThirdPartyRelated/AadharOTPValidation"));
 const RolesMaster = React.lazy(() => import("../Components/AdminItems/RolesMaster"));
+const ServiceMaster = React.lazy(() => import("../Components/AdminItems/ServiceMaster"));
 const SampleWebFlux = React.lazy(() => import("../Components/SampleWebFlux"));
 
 const routes = [
@@ -43,6 +44,12 @@ const routes = [
     {
         path: "/RolesMaster",
         element: <RolesMaster />,
+        private: true,
+        role: "ADMIN", // optional role restriction
+    },
+    {
+        path: "/ServiceMaster",
+        element: <ServiceMaster />,
         private: true,
         role: "ADMIN", // optional role restriction
     },
