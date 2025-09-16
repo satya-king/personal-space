@@ -1,4 +1,4 @@
-import { GET_AADHAR_OTP, GET_MASTER_ROLES, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, UPDATE_MASTER_ROLE } from "./APIEndPoints";
+import { GET_AADHAR_OTP, GET_ALL_SERVICES, GET_MASTER_ROLES, GET_MASTER_SERVICES, GET_SAMPLE_ONE, LOGOUT, OTP_VALIDATION, PAYMENT_QR, SAVE_MASTER_ROLE, SAVE_NEW_SERVICE, UPDATE_MASTER_ROLE, UPDATE_NEW_SERVICE } from "./APIEndPoints";
 import axiosInstance from "./axiosInstance";
 
 class CommonAPICallsService {
@@ -10,6 +10,8 @@ class CommonAPICallsService {
     getPaymentQR() {
         return axiosInstance.get(PAYMENT_QR);
     }
+
+
     getMasterRoles() {
         return axiosInstance.get(GET_MASTER_ROLES);
     }
@@ -20,6 +22,19 @@ class CommonAPICallsService {
         return axiosInstance.put(UPDATE_MASTER_ROLE, data, { params: { roleId: roleId } });
     }
 
+    getAllServices() {
+        return axiosInstance.get(GET_ALL_SERVICES);
+    }
+    createService(formData) {
+        return axiosInstance.post(SAVE_NEW_SERVICE, formData);
+    }
+    updateService(serviceId, formData) {
+        return axiosInstance.put(UPDATE_NEW_SERVICE + "/" + serviceId, formData);
+    }
+    getRoleServices() {
+        return axiosInstance.get(GET_MASTER_SERVICES);
+    }
+
 
     getAadharOtp(aadharNumber) {
         return axiosInstance.get(GET_AADHAR_OTP, { params: { aadharNo: aadharNumber } });
@@ -27,6 +42,12 @@ class CommonAPICallsService {
     validateAadharOtp(params) {
         return axiosInstance.post(OTP_VALIDATION, params);
     }
+
+
+    getSampleOne() {
+        return axiosInstance.get(GET_SAMPLE_ONE);
+    }
+
 }
 
 export default new CommonAPICallsService();

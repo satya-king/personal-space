@@ -46,6 +46,8 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     async (error) => {
+        console.log("Error in response interceptor:", error);
+
         loaderHandler.hide();
         const originalRequest = error.config;
 
@@ -98,6 +100,8 @@ axiosInstance.interceptors.response.use(
             }
         } else if (error.response && error.response.status === 403) {
             showNotification("error", error.response.data || "Access Denied.");
+        } else if (error.response && error.response.status === 429) {
+            showNotification("error", error.response.data || "Too many requests. Please try again later.");
         }
 
         return Promise.reject(error);

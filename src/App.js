@@ -1,17 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Dashboard from "./InitialComponents/DashBoard";
-import HumanVerificationMath from "./Verifications/HumanVerificationMath";
-import ToDoList from "./Components/ToDoList";
+import { useState, Suspense } from "react";
 import LoginPage from "./InitialComponents/LoginPage";
-import PaymentPage from "./Components/Payments/PaymentPage";
+import HumanVerificationMath from "./Verifications/HumanVerificationMath";
 import Layout from "./InitialComponents/Layout";
 import PrivateRoute from "./InitialComponents/PrivateRoute";
-import SampleComponent from "./Components/SampleComponent";
-import PaymentByScanning from "./Components/Payments/PaymentByScanning";
-import AadharOTPValidation from "./Components/ThirdPartyRelated/AadharOTPValidation";
-import RolesMaster from "./Components/AdminItems/RolesMaster";
-import FakeDashboard from "./InitialComponents/FakeDashboard";
+import routes from "./config/routes";
 
 const HumanVerificationWrapper = ({ setIsVerified }) => {
   const navigate = useNavigate();
@@ -37,44 +30,36 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {!isVerified ? (
-          <>
-            <Route path="/verify" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
-            <Route path="*" element={<Navigate to="/verify" replace />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/login" element={<LoginPage />} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          {!isVerified ? (
+            <>
+              <Route path="/verify" element={<HumanVerificationWrapper setIsVerified={setIsVerified} />} />
+              <Route path="*" element={<Navigate to="/verify" replace />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/login" element={<LoginPage />} />
 
-            <Route
-              element={
-                <PrivateRoute>
-                  <Layout />
-                </PrivateRoute>
-              }
-            >
-              <Route path="/home" element={<FakeDashboard />} />
-              <Route path="/toDoList" element={<ToDoList />} />
-              <Route path="/PaymentPage" element={<PaymentPage />} />
-              <Route path="/PaymentByScanning" element={<PaymentByScanning />} />
-              <Route path="/SampleComponent" element={<SampleComponent />} />
-              <Route path="/AadharOTPValidation" element={<AadharOTPValidation />} />
+              {/* Wrap private routes inside Layout + PrivateRoute */}
+              <Route
+                element={
+                  <PrivateRoute>
+                    <Layout />
+                  </PrivateRoute>
+                }
+              >
+                {routes.map(({ path, element }, index) => (
+                  <Route key={index} path={path} element={element} />
+                ))}
+              </Route>
 
-
-
-
-              <Route path="/RolesMaster" element={<RolesMaster />} />
-
-
-
-            </Route>
-
-            <Route path="*" element={<h2>404 Page Not Found</h2>} />
-          </>
-        )}
-      </Routes>
+              <Route path="*" element={<h2>404 Page Not Found</h2>} />
+            </>
+          )}
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
