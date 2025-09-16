@@ -40,6 +40,77 @@ axiosInstance.interceptors.request.use(
 );
 
 // 🔹 Response Interceptor
+// axiosInstance.interceptors.response.use(
+//     (response) => {
+//         loaderHandler.hide();
+//         return response;
+//     },
+//     async (error) => {
+//         console.log("Error in response interceptor:", error);
+
+//         loaderHandler.hide();
+//         const originalRequest = error.config;
+
+//         if (error.response && error.response.status === 401
+//             && !originalRequest._retry && !loginOrPublicEndpoints.includes(originalRequest.url)) {
+//             originalRequest._retry = true;
+
+//             if (isRefreshing) {
+//                 // Wait for ongoing refresh to finish
+//                 return new Promise((resolve) => {
+//                     addSubscriber((token) => {
+//                         originalRequest.headers.Authorization = `Bearer ${token}`;
+//                         resolve(axiosInstance(originalRequest));
+//                     });
+//                 });
+//             }
+
+//             isRefreshing = true;
+//             const refreshToken = localStorage.getItem("refreshToken");
+
+//             if (!refreshToken) {
+//                 localStorage.clear();
+//                 showNotification("error", "Your session has expired. Please log in again.", "/login");
+//                 return Promise.reject(error);
+//             }
+
+//             try {
+//                 const res = await axios.post(`${API_URL}/refresh-token`, {
+//                     refreshToken: refreshToken,
+//                 });
+
+//                 const newAccessToken = res.data.token;
+//                 const newRefreshToken = res.data.refreshToken;
+
+//                 localStorage.setItem("token", newAccessToken);
+//                 localStorage.setItem("refreshToken", newRefreshToken);
+
+//                 axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+//                 onRefreshed(newAccessToken);
+//                 isRefreshing = false;
+
+//                 // Retry original failed request
+//                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+//                 return axiosInstance(originalRequest);
+//             } catch (refreshError) {
+//                 isRefreshing = false;
+//                 localStorage.clear();
+//                 showNotification("error", "Your session has expired. Please log in again.", "/login");
+//                 return Promise.reject(refreshError);
+//             }
+//         } else if (error.response && error.response.status === 403) {
+//             showNotification("error", error.response.data || "Access Denied.");
+//         } else if (error.response && error.response.status === 429) {
+//             showNotification("error", error.response.data || "Too many requests. Please try again later.");
+//         } else if (error.response && error.response.status === 404) {
+//             showNotification("error", error.response.data || "Resource not found.");
+//         } 
+
+//         return Promise.reject(error);
+//     }
+// );
+
+
 axiosInstance.interceptors.response.use(
     (response) => {
         loaderHandler.hide();
@@ -47,16 +118,19 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         console.log("Error in response interceptor:", error);
-
         loaderHandler.hide();
-        const originalRequest = error.config;
 
-        if (error.response && error.response.status === 401
-            && !originalRequest._retry && !loginOrPublicEndpoints.includes(originalRequest.url)) {
+        const originalRequest = error.config;
+        const status = error.response?.status;
+        const errorData = error.response?.data;
+
+        // Try to extract backend message
+        const backendMessage = errorData?.message || errorData?.error || "Something went wrong";
+
+        if (status === 401 && !originalRequest._retry && !loginOrPublicEndpoints.includes(originalRequest.url)) {
             originalRequest._retry = true;
 
             if (isRefreshing) {
-                // Wait for ongoing refresh to finish
                 return new Promise((resolve) => {
                     addSubscriber((token) => {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -75,10 +149,7 @@ axiosInstance.interceptors.response.use(
             }
 
             try {
-                const res = await axios.post(`${API_URL}/refresh-token`, {
-                    refreshToken: refreshToken,
-                });
-
+                const res = await axios.post(`${API_URL}/refresh-token`, { refreshToken });
                 const newAccessToken = res.data.token;
                 const newRefreshToken = res.data.refreshToken;
 
@@ -89,7 +160,6 @@ axiosInstance.interceptors.response.use(
                 onRefreshed(newAccessToken);
                 isRefreshing = false;
 
-                // Retry original failed request
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
@@ -98,14 +168,29 @@ axiosInstance.interceptors.response.use(
                 showNotification("error", "Your session has expired. Please log in again.", "/login");
                 return Promise.reject(refreshError);
             }
-        } else if (error.response && error.response.status === 403) {
-            showNotification("error", error.response.data || "Access Denied.");
-        } else if (error.response && error.response.status === 429) {
-            showNotification("error", error.response.data || "Too many requests. Please try again later.");
+        }
+        else if (status === 403) {
+            showNotification("error", backendMessage || "Access Denied.");
+        }
+        else if (status === 404) {
+            showNotification("error", backendMessage || "Resource not found.");
+        }
+        else if (status === 429) {
+            showNotification("error", backendMessage || "Too many requests. Please try again later.");
+        }
+        else if (status === 400) {
+            showNotification("error", backendMessage || "Bad Request.");
+        }
+        else if (status === 405) {
+            showNotification("error", backendMessage || "Method Not Allowed.");
+        }
+        else if (status >= 500) {
+            showNotification("error", backendMessage || "Server error. Please try again later.");
         }
 
         return Promise.reject(error);
     }
 );
+
 
 export default axiosInstance;
