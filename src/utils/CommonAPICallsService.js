@@ -31,7 +31,7 @@ class CommonAPICallsService {
     updateService(serviceId, formData) {
         return axiosInstance.put(UPDATE_NEW_SERVICE + "/" + serviceId, formData);
     }
-    getMasterServices() {
+    getRoleServices() {
         return axiosInstance.get(GET_MASTER_SERVICES);
     }
 
