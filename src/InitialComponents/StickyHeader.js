@@ -21,10 +21,11 @@ const StickerHeader = () => {
             cancelButtonText: "No"
         }).then((result) => {
             if (result.isConfirmed) {
+                // localStorage.removeItem("isAuthenticated");
+                // localStorage.removeItem("roleId");
+                // localStorage.removeItem("userName");
+                localStorage.clear();
                 Swal.fire("Success", "Logged out successfully", "success");
-                localStorage.removeItem("isAuthenticated");
-                localStorage.removeItem("roleId");
-                localStorage.removeItem("userName");
                 navigate("/login");
             }
         });
