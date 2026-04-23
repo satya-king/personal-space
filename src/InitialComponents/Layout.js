@@ -55,7 +55,7 @@ const styles = {
         position: "sticky",
         bottom: 0,
         zIndex: 1000,
-        background: "#495c6eff",
+        background: "rgb(88, 124, 157)",
         color: "white",
         textAlign: "center",
         padding: "0px",

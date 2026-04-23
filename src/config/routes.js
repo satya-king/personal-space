@@ -1,4 +1,5 @@
 import React from "react";
+import Dashboard from "../InitialComponents/DashBoard";
 
 const FakeDashboard = React.lazy(() => import("../InitialComponents/FakeDashboard"));
 const ToDoList = React.lazy(() => import("../Components/ToDoList"));
@@ -14,7 +15,7 @@ const SampleWebFlux = React.lazy(() => import("../Components/SampleWebFlux"));
 const routes = [
     {
         path: "/home",
-        element: <FakeDashboard />,
+        // element: <Dashboard />,
         private: true,
     },
     {

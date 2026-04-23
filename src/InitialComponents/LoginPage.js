@@ -167,11 +167,12 @@ const LoginPage = () => {
         setLoading(true);
         try {
             const response = await axiosInstance.post("/login", { username, password });
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("refreshToken", response.data.refreshToken);
+            localStorage.setItem("token", response?.data?.token);
+            localStorage.setItem("refreshToken", response?.data?.refreshToken);
             localStorage.setItem("isAuthenticated", "true");
-            localStorage.setItem("userName", response.data.username);
-            localStorage.setItem("roleId", response.data.roleId);
+            localStorage.setItem("userName", response?.data?.username);
+            localStorage.setItem("roleId", response?.data?.roleId);
+            localStorage.setItem("exp", response?.data?.exp);
             navigate("/home");
         } catch (err) {
             showNotification("error", err?.response?.data?.message || "Invalid credentials");
