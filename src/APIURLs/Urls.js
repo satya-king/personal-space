@@ -1,6 +1,6 @@
-// export const API_URL = "https://learn-spring-boot.onrender.com/learn"
+export const API_URL = "https://learn-spring-boot.onrender.com/learn"
 
-export const API_URL = "http://localhost:8081/learn"
+// export const API_URL = "http://localhost:8081/learn"
 
 
 
